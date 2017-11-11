@@ -1,2 +1,5 @@
 /**/.vs/
+/**/.idea/
 /bin/
+/java-nettools/out/
+/java-nettools/native/

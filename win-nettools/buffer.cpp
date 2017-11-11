@@ -38,7 +38,14 @@ namespace nettools
         m_off = 0;
     }
 
-    i8 byte_buffer::get_i8(size_t off) const { return m_buf[off++]; }
+    void byte_buffer::reset()
+    {
+        m_lim = m_cap;
+        m_off = 0;
+    }
+
+
+    i8 byte_buffer::get_i8(size_t off) const { return m_buf[off]; }
     i16 byte_buffer::get_i16(size_t off) const { return static_cast<i16>(((m_buf[off] & 0xff) << 8) | (m_buf[off + 1] & 0xff)); }
 
     i32 byte_buffer::get_i32(size_t off) const {
@@ -97,7 +104,6 @@ namespace nettools
     void byte_buffer::put_u32(size_t off, const u32 val) const { put_i32(off, static_cast<i32>(val)); }
     void byte_buffer::put_u64(size_t off, const u64 val) const { put_i64(off, static_cast<i64>(val)); }
 
-
     i8 byte_buffer::get_i8() { size_t tmp = m_off; m_off += 1; return get_i8(tmp); }
     i16 byte_buffer::get_i16() { size_t tmp = m_off; m_off += 2; return get_i16(tmp); }
     i32 byte_buffer::get_i32() { size_t tmp = m_off; m_off += 4; return get_i32(tmp); }
@@ -114,7 +120,7 @@ namespace nettools
     void byte_buffer::put_i64(const i64 val) { size_t tmp = m_off; m_off += 8; put_i64(tmp, val); }
 
     void byte_buffer::put_u8(const u8 val) { size_t tmp = m_off; m_off += 1; put_i8(tmp, static_cast<i8>(val)); }
-    void byte_buffer::put_u16(const u16 val) { size_t tmp = m_off; m_off += 2; put_i8(tmp, static_cast<i16>(val)); }
-    void byte_buffer::put_u32(const u32 val) { size_t tmp = m_off; m_off += 4; put_i8(tmp, static_cast<i32>(val)); }
-    void byte_buffer::put_u64(const u64 val) { size_t tmp = m_off; m_off += 8; put_i8(tmp, static_cast<i64>(val)); }
+    void byte_buffer::put_u16(const u16 val) { size_t tmp = m_off; m_off += 2; put_i16(tmp, static_cast<i16>(val)); }
+    void byte_buffer::put_u32(const u32 val) { size_t tmp = m_off; m_off += 4; put_i32(tmp, static_cast<i32>(val)); }
+    void byte_buffer::put_u64(const u64 val) { size_t tmp = m_off; m_off += 8; put_i64(tmp, static_cast<i64>(val)); }
 }

@@ -54,43 +54,37 @@ namespace nettools
                 PIP_ADAPTER_UNICAST_ADDRESS unicast = current->FirstUnicastAddress;
                 if (unicast)
                 {
-                    PIP_ADAPTER_MULTICAST_ADDRESS multicast = current->FirstMulticastAddress;
-                    if (multicast) 
+                    PIP_ADAPTER_DNS_SERVER_ADDRESS dns_server = current->FirstDnsServerAddress;
+                    if (dns_server)
                     {
-                        PIP_ADAPTER_DNS_SERVER_ADDRESS dns_server = current->FirstDnsServerAddress;
-                        if (dns_server)
+                        PIP_ADAPTER_GATEWAY_ADDRESS gateway = current->FirstGatewayAddress;
+                        if (gateway)
                         {
-                            PIP_ADAPTER_GATEWAY_ADDRESS gateway = current->FirstGatewayAddress;
-                            if (gateway)
-                            {
-                                LPSOCKADDR unicast_address = unicast->Address.lpSockaddr;
-                                LPSOCKADDR multicast_address = multicast->Address.lpSockaddr;
-                                LPSOCKADDR dns_server_address = dns_server->Address.lpSockaddr;
-                                LPSOCKADDR gateway_address = gateway->Address.lpSockaddr;
-                                
-                                result.m_unicast_addr.m_b1 = unicast_address->sa_data[2];
-                                result.m_unicast_addr.m_b2 = unicast_address->sa_data[3];
-                                result.m_unicast_addr.m_b3 = unicast_address->sa_data[4];
-                                result.m_unicast_addr.m_b4 = unicast_address->sa_data[5];
+                            LPSOCKADDR unicast_address = unicast->Address.lpSockaddr;
+                            LPSOCKADDR dns_server_address = dns_server->Address.lpSockaddr;
+                            LPSOCKADDR gateway_address = gateway->Address.lpSockaddr;
 
-                                result.m_multicast_addr.m_b1 = multicast_address->sa_data[2];
-                                result.m_multicast_addr.m_b2 = multicast_address->sa_data[3];
-                                result.m_multicast_addr.m_b3 = multicast_address->sa_data[4];
-                                result.m_multicast_addr.m_b4 = multicast_address->sa_data[5];
+                            result.m_unicast_addr.m_b1 = unicast_address->sa_data[2];
+                            result.m_unicast_addr.m_b2 = unicast_address->sa_data[3];
+                            result.m_unicast_addr.m_b3 = unicast_address->sa_data[4];
+                            result.m_unicast_addr.m_b4 = unicast_address->sa_data[5];
 
-                                result.m_dns_server_addr.m_b1 = dns_server_address->sa_data[2];
-                                result.m_dns_server_addr.m_b2 = dns_server_address->sa_data[3];
-                                result.m_dns_server_addr.m_b3 = dns_server_address->sa_data[4];
-                                result.m_dns_server_addr.m_b4 = dns_server_address->sa_data[5];
+                            result.m_dns_server_addr.m_b1 = dns_server_address->sa_data[2];
+                            result.m_dns_server_addr.m_b2 = dns_server_address->sa_data[3];
+                            result.m_dns_server_addr.m_b3 = dns_server_address->sa_data[4];
+                            result.m_dns_server_addr.m_b4 = dns_server_address->sa_data[5];
 
-                                result.m_gateway_addr.m_b1 = gateway_address->sa_data[2];
-                                result.m_gateway_addr.m_b2 = gateway_address->sa_data[3];
-                                result.m_gateway_addr.m_b3 = gateway_address->sa_data[4];
-                                result.m_gateway_addr.m_b4 = gateway_address->sa_data[5];
+                            result.m_gateway_addr.m_b1 = gateway_address->sa_data[2];
+                            result.m_gateway_addr.m_b2 = gateway_address->sa_data[3];
+                            result.m_gateway_addr.m_b3 = gateway_address->sa_data[4];
+                            result.m_gateway_addr.m_b4 = gateway_address->sa_data[5];
 
-                                result.m_subnet_prefix = unicast->OnLinkPrefixLength;
-                                break;
-                            }
+                            result.m_subnet_prefix = unicast->OnLinkPrefixLength;
+
+                            u32 subnet = (1 << result.m_subnet_prefix) - 1;
+                            result.m_network_addr.m_address = result.m_unicast_addr.m_address & subnet;
+                            result.m_broadcast_addr.m_address = result.m_network_addr.m_address | ~subnet;
+                            break;
                         }
                     }
                 }

@@ -4,15 +4,15 @@
 #include <WS2tcpip.h>
 #include <thread>
 #include "interface.h"
+#include "discovery.h"
 
 nettools::socket_address server_address;
-nettools::socket_address client_address;
 bool running = false;
 
 void srv_thread()
 {
     nettools::sock_t server = nettools::socket_create(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    nettools::socket_configure_blocking(server, true);
+    //nettools::socket_configure_blocking(server, true);
     nettools::socket_bind(server, &server_address);
     nettools::socket_listen(server);
 
@@ -32,15 +32,12 @@ int main()
 {
     nettools::socket_init();
 
-    nettools::network_interface network_interface = nettools::interface_query();
-    
+    /*nettools::network_interface network_interface = nettools::interface_query();
+
     server_address.m_addr = network_interface.m_unicast_addr;
     server_address.m_port = 6654;
 
-    client_address.m_addr = network_interface.m_unicast_addr;
-    client_address.m_port = 6655;
-
-    std::thread server_thread(srv_thread);
+    //std::thread server_thread(srv_thread);
 
     nettools::sock_t client = nettools::socket_create(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     nettools::socket_connect(client, &server_address);
@@ -53,7 +50,9 @@ int main()
 
     nettools::socket_close(client);
 
-    server_thread.join();
+    //server_thread.join();*/
+
+    nettools::discovery_search();
 
     nettools::socket_cleanup();
     std::cin.get();

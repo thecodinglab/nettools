@@ -36,6 +36,7 @@ namespace nettools
         void set_limit(const size_t lim);
         void set_offset(const size_t off);
         void flip();
+        void reset();
         
         i8 get_i8(size_t off) const;
         i16 get_i16(size_t off) const;

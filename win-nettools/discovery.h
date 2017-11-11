@@ -19,20 +19,12 @@
 
 #include "defines.h"
 #include "socket.h"
-#include <Iphlpapi.h>
+#include "interface.h"
 
 namespace nettools
 {
-    struct network_interface
-    {
-        inet_address m_unicast_addr;
-        inet_address m_dns_server_addr;
-        inet_address m_gateway_addr;
+    NETTOOLS_EXPORT void discovery_init(u16 port);
+    NETTOOLS_EXPORT void discovery_close();
 
-        u8 m_subnet_prefix;
-        inet_address m_network_addr;
-        inet_address m_broadcast_addr;
-    };
-
-    NETTOOLS_EXPORT network_interface interface_query();
+    NETTOOLS_EXPORT void discovery_search();
 }

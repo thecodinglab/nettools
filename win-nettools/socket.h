@@ -20,6 +20,7 @@
 #include "defines.h"
 #include "buffer.h"
 #include <WinSock2.h>
+#include <iostream>
 
 namespace nettools
 {
@@ -38,6 +39,11 @@ namespace nettools
                 u8 m_b4;
             };
         };
+
+        void print()
+        {
+            std::cout << (m_b1 & 0xff) << "." << (m_b2 & 0xff) << "." << (m_b3 & 0xff) << "." << (m_b4 & 0xff) << std::endl;
+        }
     };
 
     struct socket_address

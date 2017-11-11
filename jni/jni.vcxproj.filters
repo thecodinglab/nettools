@@ -15,33 +15,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="socket.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="defines.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="buffer.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="interface.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="discovery.h">
+    <ClInclude Include="jnettools.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="socket.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="buffer.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="interface.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="discovery.cpp">
+    <ClCompile Include="jnettools.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
