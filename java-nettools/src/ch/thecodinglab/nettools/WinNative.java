@@ -102,18 +102,22 @@ public class WinNative {
     public static native void nBufferSetOffset(long buffer, long offset);
     public static native void nBufferFlip(long buffer);
     public static native void nBufferReset(long buffer);
+    public static native void nBufferGet(long buffer, long offset, long destination, long size);
     public static native byte nBufferGetI8(long buffer, long offset);
     public static native short nBufferGetI16(long buffer, long offset);
     public static native int nBufferGetI32(long buffer, long offset);
     public static native long nBufferGetI64(long buffer, long offset);
+    public static native void nBufferPut(long buffer, long offset, long source, long size);
     public static native void nBufferPutI8(long buffer, long offset, byte value);
     public static native void nBufferPutI16(long buffer, long offset, short value);
     public static native void nBufferPutI32(long buffer, long offset, int value);
     public static native void nBufferPutI64(long buffer, long offset, long value);
+    public static native void nBufferGet(long buffer, long destination, long size);
     public static native byte nBufferGetI8(long buffer);
     public static native short nBufferGetI16(long buffer);
     public static native int nBufferGetI32(long buffer);
     public static native long nBufferGetI64(long buffer);
+    public static native void nBufferPut(long buffer, long source, long size);
     public static native void nBufferPutI8(long buffer, byte value);
     public static native void nBufferPutI16(long buffer, short value);
     public static native void nBufferPutI32(long buffer, int value);
@@ -149,4 +153,18 @@ public class WinNative {
     public static native void nSocketConfigureBroadcast(long socket, boolean broadcast);
     public static native void nSocketConfigureSendTimeout(long socket, long timeout);
     public static native void nSocketConfigureReadTimeout(long socket, long timeout);
+    public static native void nSocketUDPBroadcastMethodAllAtOnce(long socket, long buffer, long iface, short port);
+    public static native void nSocketUDPBroadcastMethodOneATime(long socket, long buffer, long iface, short port);
+
+    public static native void nDiscoveryInit(short port);
+    public static native void nDiscoverySetHandlers(NDiscoveryCallback callback);
+    public static native void nDiscoverySearch(short port, boolean allAtOnce);
+    public static native void nDiscoveryUpdate();
+    public static native void nDiscoveryClose();
+
+    public interface NDiscoveryCallback {
+
+        boolean nCallbackDiscoveryRequest(long client);
+        void nCallbackDiscoveryFound(long client);
+    }
 }

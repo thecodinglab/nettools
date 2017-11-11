@@ -2,6 +2,7 @@
 #include <buffer.h>
 #include <socket.h>
 #include <interface.h>
+#include "discovery.h"
 
 JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nFree(JNIEnv*, jclass, jlong ptr)
 {
@@ -64,6 +65,11 @@ void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferReset(JNIEnv*, jclas
     reinterpret_cast<nettools::byte_buffer*>(buffer)->flip();
 }
 
+void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGet__JJJJ(JNIEnv*, jclass, jlong buffer, jlong offset, jlong destination, jlong length)
+{
+    reinterpret_cast<nettools::byte_buffer*>(buffer)->get(offset, reinterpret_cast<void*>(destination), length);
+}
+
 jbyte JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGetI8__JJ(JNIEnv*, jclass, jlong buffer, jlong off)
 {
     return reinterpret_cast<nettools::byte_buffer*>(buffer)->get_i8(off);
@@ -82,6 +88,11 @@ jint JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGetI32__JJ(JNIEnv*, 
 jlong JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGetI64__JJ(JNIEnv*, jclass, jlong buffer, jlong off)
 {
     return reinterpret_cast<nettools::byte_buffer*>(buffer)->get_i64(off);
+}
+
+void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferPut__JJJJ(JNIEnv*, jclass, jlong buffer, jlong offset, jlong source, jlong length)
+{
+    reinterpret_cast<nettools::byte_buffer*>(buffer)->put(offset, reinterpret_cast<void*>(source), length);
 }
 
 void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferPutI8__JJB(JNIEnv*, jclass, jlong buffer, jlong off, jbyte val)
@@ -104,6 +115,11 @@ void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferPutI64__JJJ(JNIEnv*,
     reinterpret_cast<nettools::byte_buffer*>(buffer)->put_i64(off, val);
 }
 
+void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGet__JJJ(JNIEnv*, jclass, jlong buffer, jlong destination, jlong length)
+{
+    reinterpret_cast<nettools::byte_buffer*>(buffer)->get(reinterpret_cast<void*>(destination), length);
+}
+
 jbyte JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGetI8__J(JNIEnv*, jclass, jlong buffer)
 {
     return reinterpret_cast<nettools::byte_buffer*>(buffer)->get_i8();
@@ -122,6 +138,11 @@ jint JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGetI32__J(JNIEnv*, j
 jlong JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGetI64__J(JNIEnv*, jclass, jlong buffer)
 {
     return reinterpret_cast<nettools::byte_buffer*>(buffer)->get_i64();
+}
+
+void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferPut__JJJ(JNIEnv*, jclass, jlong buffer, jlong source, jlong length)
+{
+    reinterpret_cast<nettools::byte_buffer*>(buffer)->put(reinterpret_cast<void*>(source), length);
 }
 
 void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferPutI8__JB(JNIEnv*, jclass, jlong buffer, jbyte val)
@@ -320,4 +341,95 @@ void JNICALL Java_ch_thecodinglab_nettools_WinNative_nSocketConfigureSendTimeout
 void JNICALL Java_ch_thecodinglab_nettools_WinNative_nSocketConfigureReadTimeout(JNIEnv*, jclass, jlong socket, jlong timeout)
 {
     nettools::socket_configure_read_timeout(socket, timeout);
+}
+
+void JNICALL Java_ch_thecodinglab_nettools_WinNative_nSocketUDPBroadcastMethodAllAtOnce(JNIEnv*, jclass, jlong socket, jlong buffer, jlong iface, jshort port)
+{
+    nettools::socket_udp_broadcast_method_allatonce(socket, reinterpret_cast<nettools::byte_buffer*>(buffer), reinterpret_cast<nettools::network_interface*>(iface), port);
+}
+
+void JNICALL Java_ch_thecodinglab_nettools_WinNative_nSocketUDPBroadcastMethodOneATime(JNIEnv*, jclass, jlong socket, jlong buffer, jlong iface, jshort port)
+{
+    nettools::socket_udp_broadcast_method_oneatime(socket, reinterpret_cast<nettools::byte_buffer*>(buffer), reinterpret_cast<nettools::network_interface*>(iface), port);
+}
+
+
+static JavaVM* jvm = NULL;
+static jclass callbackClass = NULL;
+static jobject callbackInstance = NULL;
+
+bool discovery_request(nettools::socket_address* client)
+{
+    if (jvm != NULL && callbackClass != NULL && callbackInstance != NULL)
+    {
+        JNIEnv* env;
+        jint result = jvm->AttachCurrentThread(reinterpret_cast<void**>(&env), NULL);
+        if (result == JNI_OK)
+        {
+            jmethodID method = env->GetMethodID(callbackClass, "nCallbackDiscoveryRequest", "(J)Z");
+            bool accept = env->CallBooleanMethod(callbackInstance, method, reinterpret_cast<jlong>(client));
+            jvm->DetachCurrentThread();
+            return accept;
+        }
+    }
+    return true;
+}
+
+void discovery_found(nettools::socket_address* client)
+{
+    if (jvm != NULL && callbackClass != NULL && callbackInstance != NULL)
+    {
+        JNIEnv* env;
+        jint result = jvm->AttachCurrentThread(reinterpret_cast<void**>(&env), NULL);
+        if (result == JNI_OK)
+        {
+            jmethodID method = env->GetMethodID(callbackClass, "nCallbackDiscoveryFound", "(J)V");
+            env->CallVoidMethod(callbackInstance, method, reinterpret_cast<jlong>(client));
+            jvm->DetachCurrentThread();
+        }
+    }
+}
+
+void JNICALL Java_ch_thecodinglab_nettools_WinNative_nDiscoveryInit(JNIEnv*, jclass, jshort port)
+{
+    nettools::discovery_init(port);
+    nettools::discovery_set_handlers(discovery_request, discovery_found);
+}
+
+void JNICALL Java_ch_thecodinglab_nettools_WinNative_nDiscoverySetHandlers(JNIEnv* env, jclass, jobject callback)
+{
+    jint result = env->GetJavaVM(&jvm);
+    if (result != JNI_OK) return;
+
+    if (callbackClass != NULL) env->DeleteGlobalRef(callbackClass);
+    if (callbackInstance != NULL) env->DeleteGlobalRef(callbackInstance);
+
+    callbackInstance = env->NewGlobalRef(callback);
+
+    jclass objClass = env->GetObjectClass(callback);
+    if (objClass)
+    {
+        callbackClass = static_cast<jclass>(env->NewGlobalRef(objClass));
+        env->DeleteLocalRef(objClass);
+    }
+}
+
+void JNICALL Java_ch_thecodinglab_nettools_WinNative_nDiscoverySearch(JNIEnv*, jclass, jshort port, jboolean allatonce)
+{
+    nettools::discovery_search(port, allatonce);
+}
+
+void JNICALL Java_ch_thecodinglab_nettools_WinNative_nDiscoveryUpdate(JNIEnv*, jclass)
+{
+    nettools::discovery_update();
+}
+
+void JNICALL Java_ch_thecodinglab_nettools_WinNative_nDiscoveryClose(JNIEnv* env, jclass)
+{
+    nettools::discovery_close();
+    if (callbackClass != NULL) env->DeleteGlobalRef(callbackClass);
+    if (callbackInstance != NULL) env->DeleteGlobalRef(callbackInstance);
+    callbackClass = NULL;
+    callbackInstance = NULL;
+    jvm = NULL;
 }

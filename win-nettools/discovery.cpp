@@ -18,47 +18,97 @@
 #include "discovery.h"
 #include <iostream>
 
+#define DISCOVERY_ID            0xe3f7
+#define DISCOVERY_VERSION       0x0101
+#define DISCOVERY_TYPE_REQUEST  0x0001
+#define DISCOVERY_TYPE_ANSWER   0x0002
+
 namespace nettools
 {
-    static sock_t discovery_socket;
+    static byte_buffer discovery_read_buffer = byte_buffer(6);
+    static byte_buffer discovery_write_buffer = byte_buffer(6);
 
-    void discovery_init(u16 port) { discovery_socket = socket_create(AF_INET, SOCK_DGRAM, IPPROTO_UDP); }
-    void discovery_close() { socket_close(discovery_socket); }
+    static sock_t discovery_socket = 0;
+    static network_interface discovery_iface;
+    static callback_discovery_request discovery_request = NULL;
+    static callback_discovery_found discovery_found = NULL;
 
-    void discovery_search()
+    void discovery_init(u16 port)
     {
-        network_interface iface = interface_query();
-        inet_address broadcast = iface.m_broadcast_addr;
+        if (discovery_socket != 0) return;
 
-        broadcast.print();
+        discovery_socket = socket_create(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+        discovery_iface = interface_query();
 
-        socket_address address;
-        address.m_addr = iface.m_unicast_addr;
-        address.m_port = 12345;
+        socket_address addr;
+        addr.m_addr = discovery_iface.m_unicast_addr;
+        addr.m_port = port;
+        socket_bind(discovery_socket, &addr);
 
-        socket_address multicast_address;
-        multicast_address.m_addr = broadcast;
-        multicast_address.m_port = 12346;
+        socket_configure_blocking(discovery_socket, false);
+    }
 
-        sock_t socket = socket_create(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-        socket_bind(socket, &address);
-        socket_configure_broadcast(socket, true);
+    void discovery_set_handlers(callback_discovery_request cdr, callback_discovery_found cdf)
+    {
+        discovery_request = cdr;
+        discovery_found = cdf;
+    }
 
-        byte_buffer packet(1024);
-        packet.put_i32(1234);
-        packet.flip();
+    void discovery_search(u16 port, bool allatonce)
+    {
+        discovery_write_buffer.reset();
+        discovery_write_buffer.put_i16(DISCOVERY_ID);
+        discovery_write_buffer.put_i16(DISCOVERY_VERSION);
+        discovery_write_buffer.put_i16(DISCOVERY_TYPE_REQUEST);
+        discovery_write_buffer.flip();
 
-        socket_sendto(socket, &packet, &multicast_address);
+        if (allatonce) socket_udp_broadcast_method_allatonce(discovery_socket, &discovery_write_buffer, &discovery_iface, port);
+        else socket_udp_broadcast_method_oneatime(discovery_socket, &discovery_write_buffer, &discovery_iface, port);
+    }
 
-        std::cout << "SEND" << std::endl;
+    void discovery_update()
+    {
+        socket_address client;
+        discovery_read_buffer.reset();
+        i32 read = socket_readfrom(discovery_socket, &discovery_read_buffer, &client);
 
-        packet.reset();
-        socket_address sender;
-        socket_readfrom(socket, &packet, &sender);
-        packet.flip();
+        if (read > 0)
+        {
+            discovery_read_buffer.flip();
 
-        std::cout << packet.get_i32() << std::endl;
+            u16 id = discovery_read_buffer.get_u16();
+            if (id == DISCOVERY_ID) {
+                u16 version = discovery_read_buffer.get_u16();
+                if (version == DISCOVERY_VERSION)
+                {
+                    u16 type = discovery_read_buffer.get_u16();
+                    if (type == DISCOVERY_TYPE_REQUEST)
+                    {
+                        if (discovery_request == NULL || discovery_request(&client))
+                        {
+                            discovery_write_buffer.reset();
+                            discovery_write_buffer.put_i16(DISCOVERY_ID);
+                            discovery_write_buffer.put_i16(DISCOVERY_VERSION);
+                            discovery_write_buffer.put_i16(DISCOVERY_TYPE_ANSWER);
+                            discovery_write_buffer.flip();
 
-        socket_close(socket);
+                            socket_sendto(discovery_socket, &discovery_write_buffer, &client);
+
+                            if (discovery_found != NULL) discovery_found(&client);
+                        }
+                    }
+                    else if (type == DISCOVERY_TYPE_ANSWER)
+                    {
+                        if (discovery_found != NULL) discovery_found(&client);
+                    }
+                }
+            }
+        }
+    }
+
+    void discovery_close()
+    {
+        socket_close(discovery_socket);
+        discovery_socket = 0;
     }
 }

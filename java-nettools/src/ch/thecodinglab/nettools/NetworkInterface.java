@@ -37,9 +37,11 @@ public class NetworkInterface {
     public byte[] getNetworkAddress() {
         return mNetworkAddress;
     }
+
     public byte[] getBroadcastAddress() {
         return mBroadcastAddress;
     }
+
     public static NetworkInterface query() {
         long iface = WinNative.nInterfaceQuery();
         GarbageCollector.registerPointer(iface, GarbageCollector.DeleteFunc.DELETE_ARRAY);

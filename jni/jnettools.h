@@ -3,7 +3,6 @@
 #include <jni_md.h>
 #include <jni.h>
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -20,18 +19,22 @@ extern "C" {
     JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferSetOffset(JNIEnv*, jclass, jlong, jlong);
     JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferFlip(JNIEnv*, jclass, jlong);
     JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferReset(JNIEnv*, jclass, jlong);
+    JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGet__JJJJ(JNIEnv*, jclass, jlong, jlong, jlong, jlong);
     JNIEXPORT jbyte JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGetI8__JJ(JNIEnv*, jclass, jlong, jlong);
     JNIEXPORT jshort JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGetI16__JJ(JNIEnv*, jclass, jlong, jlong);
     JNIEXPORT jint JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGetI32__JJ(JNIEnv*, jclass, jlong, jlong);
     JNIEXPORT jlong JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGetI64__JJ(JNIEnv*, jclass, jlong, jlong);
+    JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferPut__JJJJ(JNIEnv*, jclass, jlong, jlong, jlong, jlong);
     JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferPutI8__JJB(JNIEnv*, jclass, jlong, jlong, jbyte);
     JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferPutI16__JJS(JNIEnv*, jclass, jlong, jlong, jshort);
     JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferPutI32__JJI(JNIEnv*, jclass, jlong, jlong, jint);
     JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferPutI64__JJJ(JNIEnv*, jclass, jlong, jlong, jlong);
+    JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGet__JJJ(JNIEnv*, jclass, jlong, jlong, jlong);
     JNIEXPORT jbyte JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGetI8__J(JNIEnv*, jclass, jlong);
     JNIEXPORT jshort JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGetI16__J(JNIEnv*, jclass, jlong);
     JNIEXPORT jint JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGetI32__J(JNIEnv*, jclass, jlong);
     JNIEXPORT jlong JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGetI64__J(JNIEnv*, jclass, jlong);
+    JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferPut__JJJ(JNIEnv*, jclass, jlong, jlong, jlong);
     JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferPutI8__JB(JNIEnv*, jclass, jlong, jbyte);
     JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferPutI16__JS(JNIEnv*, jclass, jlong, jshort);
     JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferPutI32__JI(JNIEnv*, jclass, jlong, jint);
@@ -67,6 +70,14 @@ extern "C" {
     JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nSocketConfigureBroadcast(JNIEnv*, jclass, jlong, jboolean);
     JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nSocketConfigureSendTimeout(JNIEnv*, jclass, jlong, jlong);
     JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nSocketConfigureReadTimeout(JNIEnv*, jclass, jlong, jlong);
+    JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nSocketUDPBroadcastMethodAllAtOnce(JNIEnv*, jclass, jlong, jlong, jlong, jshort);
+    JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nSocketUDPBroadcastMethodOneATime(JNIEnv*, jclass, jlong, jlong, jlong, jshort);
+
+    JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nDiscoveryInit(JNIEnv*, jclass, jshort);
+    JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nDiscoverySetHandlers(JNIEnv*, jclass, jobject);
+    JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nDiscoverySearch(JNIEnv*, jclass, jshort, jboolean);
+    JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nDiscoveryUpdate(JNIEnv*, jclass);
+    JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nDiscoveryClose(JNIEnv*, jclass);
 #ifdef __cplusplus
 }
 #endif

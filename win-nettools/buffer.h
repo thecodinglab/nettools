@@ -23,7 +23,7 @@ namespace nettools
 {
     struct NETTOOLS_EXPORT byte_buffer
     {
-        explicit byte_buffer(size_t capacity);
+        explicit byte_buffer(size_t);
         ~byte_buffer();
 
         u8* get_buffer_at_offset();
@@ -33,30 +33,36 @@ namespace nettools
         size_t get_limit() const;
         size_t get_offset() const;
 
-        void set_limit(const size_t lim);
-        void set_offset(const size_t off);
+        void set_limit(const size_t);
+        void set_offset(const size_t);
         void flip();
         void reset();
         
-        i8 get_i8(size_t off) const;
-        i16 get_i16(size_t off) const;
-        i32 get_i32(size_t off) const;
-        i64 get_i64(size_t off) const;
+        void get(size_t, void*, size_t) const;
 
-        u8 get_u8(size_t off) const;
-        u16 get_u16(size_t off) const;
-        u32 get_u32(size_t off) const;
-        u64 get_u64(size_t off) const;
+        i8 get_i8(size_t) const;
+        i16 get_i16(size_t) const;
+        i32 get_i32(size_t) const;
+        i64 get_i64(size_t) const;
 
-        void put_i8(size_t off, const i8 val) const;
-        void put_i16(size_t off, const i16 val) const;
-        void put_i32(size_t off, const i32 val) const;
-        void put_i64(size_t off, const i64 val) const;
+        u8 get_u8(size_t) const;
+        u16 get_u16(size_t) const;
+        u32 get_u32(size_t) const;
+        u64 get_u64(size_t) const;
 
-        void put_u8(size_t off, const u8 val) const;
-        void put_u16(size_t off, const u16 val) const;
-        void put_u32(size_t off, const u32 val) const;
-        void put_u64(size_t off, const u64 val) const;
+        void put(size_t, void*, size_t);
+
+        void put_i8(size_t, i8);
+        void put_i16(size_t, i16);
+        void put_i32(size_t, i32);
+        void put_i64(size_t, i64);
+
+        void put_u8(size_t, u8);
+        void put_u16(size_t, u16);
+        void put_u32(size_t, u32);
+        void put_u64(size_t, u64);
+
+        void get(void*, size_t);
 
         i8 get_i8();
         i16 get_i16();
@@ -68,15 +74,17 @@ namespace nettools
         u32 get_u32();
         u64 get_u64();
 
-        void put_i8(const i8 val);
-        void put_i16(const i16 val);
-        void put_i32(const i32 val);
-        void put_i64(const i64 val);
+        void put(void*, size_t);
 
-        void put_u8(const u8 val);
-        void put_u16(const u16 val);
-        void put_u32(const u32 val);
-        void put_u64(const u64 val);
+        void put_i8(i8);
+        void put_i16(i16);
+        void put_i32(i32);
+        void put_i64(i64);
+
+        void put_u8(u8);
+        void put_u16(u16);
+        void put_u32(u32);
+        void put_u64(u64);
     private:
         u8* m_buf;
         size_t m_cap;

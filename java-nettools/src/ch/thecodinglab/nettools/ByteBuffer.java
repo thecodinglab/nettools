@@ -39,6 +39,10 @@ public class ByteBuffer extends Pointer {
         WinNative.nBufferReset(mNativeHandle);
     }
 
+    public void get(long off, long buf, long len) {
+        WinNative.nBufferGet(mNativeHandle, off, buf, len);
+    }
+
     public byte getByte(long off) {
         return WinNative.nBufferGetI8(mNativeHandle, off);
     }
@@ -53,6 +57,10 @@ public class ByteBuffer extends Pointer {
 
     public long getLong(long off) {
         return WinNative.nBufferGetI64(mNativeHandle, off);
+    }
+
+    public void put(long off, long buf, long len) {
+        WinNative.nBufferPut(mNativeHandle, off, buf, len);
     }
 
     public void putByte(long off, byte val) {
@@ -71,6 +79,10 @@ public class ByteBuffer extends Pointer {
         WinNative.nBufferPutI64(mNativeHandle, off, val);
     }
 
+    public void get(long buf, long len) {
+        WinNative.nBufferGet(mNativeHandle, buf, len);
+    }
+
     public byte getByte() {
         return WinNative.nBufferGetI8(mNativeHandle);
     }
@@ -85,6 +97,10 @@ public class ByteBuffer extends Pointer {
 
     public long getLong() {
         return WinNative.nBufferGetI64(mNativeHandle);
+    }
+
+    public void put(long buf, long len) {
+        WinNative.nBufferPut(mNativeHandle, buf, len);
     }
 
     public void putByte(byte val) {

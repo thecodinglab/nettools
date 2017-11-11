@@ -20,11 +20,16 @@
 #include "defines.h"
 #include "socket.h"
 #include "interface.h"
+#include "udp_utility.h"
 
 namespace nettools
 {
-    NETTOOLS_EXPORT void discovery_init(u16 port);
-    NETTOOLS_EXPORT void discovery_close();
+    typedef bool(*callback_discovery_request)(socket_address*);
+    typedef void(*callback_discovery_found)(socket_address*);
 
-    NETTOOLS_EXPORT void discovery_search();
+    NETTOOLS_EXPORT void discovery_init(u16);
+    NETTOOLS_EXPORT void discovery_set_handlers(callback_discovery_request, callback_discovery_found);
+    NETTOOLS_EXPORT void discovery_search(u16, bool = true);
+    NETTOOLS_EXPORT void discovery_update();
+    NETTOOLS_EXPORT void discovery_close();
 }

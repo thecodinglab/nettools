@@ -42,4 +42,9 @@ public class SocketAddress {
         System.arraycopy(address,0, mAddress, 0, 4);
         mPort = WinNative.nSocketAddressGetPort(pointer);
     }
+
+    @Override
+    public String toString() {
+        return (mAddress[0] & 0xff) + "." + (mAddress[1] & 0xff) + "." +(mAddress[2] & 0xff) + "." +(mAddress[3] & 0xff) + ":" + mPort;
+    }
 }

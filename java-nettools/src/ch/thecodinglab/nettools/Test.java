@@ -10,30 +10,23 @@ public class Test {
 
         Socket.initialize();
 
-        NetworkInterface iface = NetworkInterface.query();
-        SocketAddress address = new SocketAddress(iface.getUnicastAddress(), (short) 12346);
+        Discovery.initailize((short) 12346);
+        Discovery.setCallback(new Discovery.Callback() {
+            @Override
+            public boolean discoveryRequestReceived(SocketAddress address) {
+                return true;
+            }
+            @Override
+            public void discoveryClientFound(SocketAddress address) {
+                System.out.println("Found: " + address.toString());
+            }
+        });
 
-        Socket socket = new Socket(SocketFamily.AF_INET, SocketType.SOCK_DGRAM, IPProtocol.IPPROTO_UDP);
-        socket.bind(address);
+        while (true) {
+            Discovery.update();
+        }
 
-        ByteBuffer buffer = new ByteBuffer(1024);
-        SocketAddress client = new SocketAddress();
-        socket.readFrom(buffer, client);
-        buffer.flip();
-        System.out.println(buffer.getInt());
-
-        buffer.setOffset(0);
-        buffer.setLimit(buffer.getCapacity());
-
-        buffer.putInt(98745);
-        buffer.flip();
-
-        socket.sendTo(buffer, client);
-
-        buffer.delete();
-        socket.close();
-
-        Socket.cleanup();
-        GarbageCollector.cleanup();
+        /*Socket.cleanup();
+        GarbageCollector.cleanup();*/
     }
 }

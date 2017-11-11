@@ -83,6 +83,16 @@ public class Socket implements Closeable {
         WinNative.nSocketConfigureReadTimeout(mNativeHandle, timeout);
     }
 
+    public void doUDPBroadcastMethodAllAtOnce(ByteBuffer buffer, NetworkInterface iface, short port) {
+        // TODO
+        throw new UnsupportedOperationException("This is not supported right now");
+    }
+
+    public void doUDPBroadcastMethodOneATime(ByteBuffer buffer, NetworkInterface iface, short port) {
+        // TODO
+        throw new UnsupportedOperationException("This is not supported right now");
+    }
+
     @Override
     public void close() {
         WinNative.nSocketClose(mNativeHandle);

@@ -147,6 +147,7 @@
     <ClInclude Include="discovery.h" />
     <ClInclude Include="interface.h" />
     <ClInclude Include="socket.h" />
+    <ClInclude Include="udp_utility.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="buffer.cpp" />

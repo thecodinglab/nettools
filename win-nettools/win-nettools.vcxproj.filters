@@ -30,6 +30,9 @@
     <ClInclude Include="discovery.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="udp_utility.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="socket.cpp">

@@ -16,6 +16,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "socket.h"
+#include "udp_utility.h"
 
 namespace nettools
 {
@@ -93,7 +94,7 @@ namespace nettools
 
         size_t position = buffer->get_offset();
         i32 read = recvfrom(socket, reinterpret_cast<char*>(buffer->get_buffer_at_offset()), buffer->get_limit(), 0, reinterpret_cast<sockaddr*>(&addr), &addr_size);
-
+        
         if (addr_size != sizeof(sockaddr_in)) throw std::runtime_error("Invalid address size.");
 
         address->m_port = addr.sin_port;
@@ -111,7 +112,46 @@ namespace nettools
         ioctlsocket(socket, FIONBIO, reinterpret_cast<u_long*>(&inonblock));
     }
 
-    NETTOOLS_EXPORT void socket_configure_broadcast(sock_t socket, bool broadcast) { setsockopt(socket, SOL_SOCKET, SO_BROADCAST, reinterpret_cast<const char*>(&broadcast), sizeof(bool)); }
-    NETTOOLS_EXPORT void socket_configure_send_timeout(sock_t socket, size_t timeout) { setsockopt(socket, SOL_SOCKET, SO_SNDTIMEO, reinterpret_cast<const char*>(&timeout), sizeof(size_t)); }
-    NETTOOLS_EXPORT void socket_configure_read_timeout(sock_t socket, size_t timeout) { setsockopt(socket, SOL_SOCKET, SO_RCVTIMEO, reinterpret_cast<const char*>(&timeout), sizeof(size_t)); }
+    void socket_configure_broadcast(sock_t socket, bool broadcast) { setsockopt(socket, SOL_SOCKET, SO_BROADCAST, reinterpret_cast<const char*>(&broadcast), sizeof(bool)); }
+    void socket_configure_send_timeout(sock_t socket, size_t timeout) { setsockopt(socket, SOL_SOCKET, SO_SNDTIMEO, reinterpret_cast<const char*>(&timeout), sizeof(size_t)); }
+    void socket_configure_read_timeout(sock_t socket, size_t timeout) { setsockopt(socket, SOL_SOCKET, SO_RCVTIMEO, reinterpret_cast<const char*>(&timeout), sizeof(size_t)); }
+
+    void socket_udp_broadcast_method_allatonce(sock_t socket, byte_buffer* data, network_interface* iface, u16 port)
+    {
+        socket_address addr;
+        addr.m_addr = iface->m_broadcast_addr;
+        addr.m_port = port;
+        socket_sendto(socket, data, &addr);
+    }
+
+    void socket_udp_broadcast_method_oneatime(sock_t socket, byte_buffer* data, network_interface* iface, u16 port)
+    {
+        socket_address addr;
+        addr.m_addr = iface->m_network_addr;
+        addr.m_addr.m_b4++;
+        addr.m_port = port;
+
+        while (addr.m_addr.m_address != iface->m_broadcast_addr.m_address)
+        {
+            socket_sendto(socket, data, &addr);
+
+            addr.m_addr.m_b4++;
+            if (addr.m_addr.m_b4 == 0)
+            {
+                addr.m_addr.m_b3++;
+                if (addr.m_addr.m_b3 == 0)
+                {
+                    addr.m_addr.m_b2++;
+                    if (addr.m_addr.m_b2 == 0)
+                    {
+                        addr.m_addr.m_b1++;
+                        if (addr.m_addr.m_b1 == 0)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
