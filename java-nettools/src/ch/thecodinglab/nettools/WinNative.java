@@ -72,10 +72,21 @@ public class WinNative {
     public static final int IPPROTO_RAW = 255;
     public static final int IPPROTO_MAX = 256;
 
-    public static void loadLibrary() {
-        //File nativeFile = new File("native/jni_nettools_x64.dll");
-        File nativeFile = new File("P:\\C++\\win-nettools\\bin\\Debug\\x64\\jni_nettools_x64.dll");
-        System.load(nativeFile.getAbsolutePath());
+    public static void loadLibrary(File nativesFolder) {
+        String arch = System.getProperty("os.arch");
+
+        String archExtension;
+        if (arch.contains("64")) {
+            archExtension = "x64";
+        } else {
+            archExtension = "x86";
+        }
+
+        File nettoolsFile = new File(nativesFolder, "win-nettools_" + archExtension + ".dll");
+        File libraryFile = new File(nativesFolder, "jni_nettools_" + archExtension + ".dll");
+
+        System.load(nettoolsFile.getAbsolutePath());
+        System.load(libraryFile.getAbsolutePath());
     }
 
     public static native void nFree(long ptr);
@@ -90,6 +101,7 @@ public class WinNative {
     public static native void nBufferSetLimit(long buffer, long limit);
     public static native void nBufferSetOffset(long buffer, long offset);
     public static native void nBufferFlip(long buffer);
+    public static native void nBufferReset(long buffer);
     public static native byte nBufferGetI8(long buffer, long offset);
     public static native short nBufferGetI16(long buffer, long offset);
     public static native int nBufferGetI32(long buffer, long offset);

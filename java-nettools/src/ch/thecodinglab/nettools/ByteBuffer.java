@@ -35,6 +35,10 @@ public class ByteBuffer extends Pointer {
         WinNative.nBufferFlip(mNativeHandle);
     }
 
+    public void reset() {
+        WinNative.nBufferReset(mNativeHandle);
+    }
+
     public byte getByte(long off) {
         return WinNative.nBufferGetI8(mNativeHandle, off);
     }

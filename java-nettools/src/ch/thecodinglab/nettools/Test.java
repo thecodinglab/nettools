@@ -1,11 +1,12 @@
 package ch.thecodinglab.nettools;
 
+import java.io.File;
 import java.util.Arrays;
 
 public class Test {
 
     public static void main(String[] args) {
-        WinNative.loadLibrary();
+        WinNative.loadLibrary(new File("P:\\C++\\win-nettools\\bin\\Debug\\"));
 
         Socket.initialize();
 
