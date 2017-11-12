@@ -77,6 +77,7 @@ extern "C" {
     JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nDiscoverySetHandlers(JNIEnv*, jclass, jobject);
     JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nDiscoverySearch(JNIEnv*, jclass, jshort, jboolean);
     JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nDiscoveryUpdate(JNIEnv*, jclass);
+    JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nDiscoveryPing(JNIEnv*, jclass, jlong);
     JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nDiscoveryClose(JNIEnv*, jclass);
 #ifdef __cplusplus
 }

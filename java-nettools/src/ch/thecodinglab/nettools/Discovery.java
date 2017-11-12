@@ -29,6 +29,16 @@ public class Discovery implements WinNative.NDiscoveryCallback {
         }
     }
 
+    @Override
+    public void nCallbackDiscoveryPingResult(long client, int time, boolean reachable) {
+        if (sCallback != null) {
+            SocketAddress address = new SocketAddress();
+            address.update(client);
+
+            sCallback.discoveryPingResult(address, time, reachable);
+        }
+    }
+
     public static void initailize(short port) {
         WinNative.nDiscoveryInit(port);
         WinNative.nDiscoverySetHandlers(sInstance);
@@ -46,13 +56,19 @@ public class Discovery implements WinNative.NDiscoveryCallback {
         WinNative.nDiscoveryUpdate();
     }
 
+    public static void ping(SocketAddress address) {
+        long ptr = address.toNative();
+        WinNative.nDiscoveryPing(ptr);
+        GarbageCollector.delete(ptr);
+    }
+
     public static void close() {
         WinNative.nDiscoveryClose();
     }
 
     public interface Callback {
-
         boolean discoveryRequestReceived(SocketAddress address);
         void discoveryClientFound(SocketAddress address);
+        void discoveryPingResult(SocketAddress address, int time, boolean reachable);
     }
 }

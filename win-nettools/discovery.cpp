@@ -17,11 +17,16 @@
 */
 #include "discovery.h"
 #include <iostream>
+#include <map>
+#include <chrono>
 
 #define DISCOVERY_ID            0xe3f7
-#define DISCOVERY_VERSION       0x0101
+#define DISCOVERY_VERSION       0x0102
 #define DISCOVERY_TYPE_REQUEST  0x0001
 #define DISCOVERY_TYPE_ANSWER   0x0002
+#define DISCOVERY_TYPE_PING     0x0003
+
+#define DISCOVERY_PING_DURATION 5000
 
 namespace nettools
 {
@@ -32,6 +37,8 @@ namespace nettools
     static network_interface discovery_iface;
     static callback_discovery_request discovery_request = NULL;
     static callback_discovery_found discovery_found = NULL;
+    static callback_discovery_ping_result discovery_ping_result = NULL;
+    static std::map<socket_address, std::chrono::steady_clock::time_point> discovery_ping_table;
 
     void discovery_init(u16 port)
     {
@@ -48,10 +55,11 @@ namespace nettools
         socket_configure_blocking(discovery_socket, false);
     }
 
-    void discovery_set_handlers(callback_discovery_request cdr, callback_discovery_found cdf)
+    void discovery_set_handlers(callback_discovery_request cdr, callback_discovery_found cdf, callback_discovery_ping_result cdpr)
     {
         discovery_request = cdr;
         discovery_found = cdf;
+        discovery_ping_result = cdpr;
     }
 
     void discovery_search(u16 port, bool allatonce)
@@ -101,9 +109,61 @@ namespace nettools
                     {
                         if (discovery_found != NULL) discovery_found(&client);
                     }
+                    else if (type == DISCOVERY_TYPE_PING)
+                    {
+                        auto received = std::chrono::high_resolution_clock::now();
+                        auto itr = discovery_ping_table.find(client);
+                        if (itr == discovery_ping_table.end())
+                        {
+                            discovery_write_buffer.reset();
+                            discovery_write_buffer.put_i16(DISCOVERY_ID);
+                            discovery_write_buffer.put_i16(DISCOVERY_VERSION);
+                            discovery_write_buffer.put_i16(DISCOVERY_TYPE_PING);
+                            discovery_write_buffer.flip();
+
+                            socket_sendto(discovery_socket, &discovery_write_buffer, &client);
+                        }
+                        else
+                        {
+                            auto send = itr->second;
+                            if (discovery_ping_result)
+                            {
+                                u32 needed = static_cast<u32>(std::chrono::duration_cast<std::chrono::milliseconds>(received - send).count());
+                                discovery_ping_result(&client, needed, true);
+                            }
+                            discovery_ping_table.erase(itr);
+                        }
+                    }
                 }
             }
         }
+
+        auto now = std::chrono::high_resolution_clock::now();
+        auto itr = discovery_ping_table.begin();
+        while (itr != discovery_ping_table.end())
+        {
+            socket_address addr = itr->first;
+            auto send = itr->second;
+            
+            if ((now - send) > std::chrono::milliseconds(DISCOVERY_PING_DURATION))
+            {
+                if (discovery_ping_result) discovery_ping_result(&addr, 0, false);
+                itr = discovery_ping_table.erase(itr);
+            }
+            else ++itr;
+        }
+    }
+
+    void discovery_ping(socket_address* addr)
+    {
+        discovery_write_buffer.reset();
+        discovery_write_buffer.put_i16(DISCOVERY_ID);
+        discovery_write_buffer.put_i16(DISCOVERY_VERSION);
+        discovery_write_buffer.put_i16(DISCOVERY_TYPE_PING);
+        discovery_write_buffer.flip();
+
+        socket_sendto(discovery_socket, &discovery_write_buffer, addr);
+        discovery_ping_table[*addr] = std::chrono::high_resolution_clock::now();
     }
 
     void discovery_close()

@@ -50,6 +50,18 @@ namespace nettools
     {
         inet_address m_addr;
         u16 m_port;
+
+        bool operator<(const socket_address& other) const
+        {
+            if (m_addr.m_address == other.m_addr.m_address) return m_port < other.m_port;
+            return m_addr.m_address < other.m_addr.m_address;
+        }
+
+        bool operator>(const socket_address& other) const
+        {
+            if (m_addr.m_address == other.m_addr.m_address) return m_port > other.m_port;
+            return m_addr.m_address > other.m_addr.m_address;
+        }
     };
 
     NETTOOLS_EXPORT void socket_init();

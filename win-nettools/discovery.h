@@ -26,10 +26,12 @@ namespace nettools
 {
     typedef bool(*callback_discovery_request)(socket_address*);
     typedef void(*callback_discovery_found)(socket_address*);
+    typedef void(*callback_discovery_ping_result)(socket_address*, u32, bool);
 
     NETTOOLS_EXPORT void discovery_init(u16);
-    NETTOOLS_EXPORT void discovery_set_handlers(callback_discovery_request, callback_discovery_found);
+    NETTOOLS_EXPORT void discovery_set_handlers(callback_discovery_request, callback_discovery_found, callback_discovery_ping_result);
     NETTOOLS_EXPORT void discovery_search(u16, bool = true);
     NETTOOLS_EXPORT void discovery_update();
+    NETTOOLS_EXPORT void discovery_ping(socket_address* addr);
     NETTOOLS_EXPORT void discovery_close();
 }

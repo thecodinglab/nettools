@@ -160,11 +160,12 @@ public class WinNative {
     public static native void nDiscoverySetHandlers(NDiscoveryCallback callback);
     public static native void nDiscoverySearch(short port, boolean allAtOnce);
     public static native void nDiscoveryUpdate();
+    public static native void nDiscoveryPing(long address);
     public static native void nDiscoveryClose();
 
     public interface NDiscoveryCallback {
-
         boolean nCallbackDiscoveryRequest(long client);
         void nCallbackDiscoveryFound(long client);
+        void nCallbackDiscoveryPingResult(long client, int time, boolean reachable);
     }
 }

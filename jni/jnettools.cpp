@@ -390,10 +390,25 @@ void discovery_found(nettools::socket_address* client)
     }
 }
 
+void discovery_ping_result(nettools::socket_address* client, u32 time, bool reachable)
+{
+    if (jvm != NULL && callbackClass != NULL && callbackInstance != NULL)
+    {
+        JNIEnv* env;
+        jint result = jvm->AttachCurrentThread(reinterpret_cast<void**>(&env), NULL);
+        if (result == JNI_OK)
+        {
+            jmethodID method = env->GetMethodID(callbackClass, "nCallbackDiscoveryPingResult", "(JIZ)V");
+            env->CallVoidMethod(callbackInstance, method, reinterpret_cast<jlong>(client), static_cast<jint>(time), static_cast<jboolean>(reachable));
+            jvm->DetachCurrentThread();
+        }
+    }
+}
+
 void JNICALL Java_ch_thecodinglab_nettools_WinNative_nDiscoveryInit(JNIEnv*, jclass, jshort port)
 {
     nettools::discovery_init(port);
-    nettools::discovery_set_handlers(discovery_request, discovery_found);
+    nettools::discovery_set_handlers(discovery_request, discovery_found, discovery_ping_result);
 }
 
 void JNICALL Java_ch_thecodinglab_nettools_WinNative_nDiscoverySetHandlers(JNIEnv* env, jclass, jobject callback)
@@ -422,6 +437,11 @@ void JNICALL Java_ch_thecodinglab_nettools_WinNative_nDiscoverySearch(JNIEnv*, j
 void JNICALL Java_ch_thecodinglab_nettools_WinNative_nDiscoveryUpdate(JNIEnv*, jclass)
 {
     nettools::discovery_update();
+}
+
+void JNICALL Java_ch_thecodinglab_nettools_WinNative_nDiscoveryPing(JNIEnv*, jclass, jlong addr)
+{
+    nettools::discovery_ping(reinterpret_cast<nettools::socket_address*>(addr));
 }
 
 void JNICALL Java_ch_thecodinglab_nettools_WinNative_nDiscoveryClose(JNIEnv* env, jclass)
