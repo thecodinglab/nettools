@@ -53,6 +53,7 @@ namespace nettools
         socket_bind(discovery_socket, &addr);
 
         socket_configure_blocking(discovery_socket, false);
+        socket_configure_broadcast(discovery_socket, true);
     }
 
     void discovery_set_handlers(callback_discovery_request cdr, callback_discovery_found cdf, callback_discovery_ping_result cdpr)
@@ -64,6 +65,8 @@ namespace nettools
 
     void discovery_search(u16 port, bool allatonce)
     {
+        socket_configure_blocking(discovery_socket, true);
+
         discovery_write_buffer.reset();
         discovery_write_buffer.put_i16(DISCOVERY_ID);
         discovery_write_buffer.put_i16(DISCOVERY_VERSION);
@@ -72,6 +75,8 @@ namespace nettools
 
         if (allatonce) socket_udp_broadcast_method_allatonce(discovery_socket, &discovery_write_buffer, &discovery_iface, port);
         else socket_udp_broadcast_method_oneatime(discovery_socket, &discovery_write_buffer, &discovery_iface, port);
+    
+        socket_configure_blocking(discovery_socket, false);
     }
 
     void discovery_update()
