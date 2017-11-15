@@ -1,0 +1,1 @@
+add_library(jni-nettools SHARED jnettools.h jnettools.cpp)

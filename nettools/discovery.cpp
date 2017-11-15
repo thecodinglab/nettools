@@ -16,9 +16,8 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "discovery.h"
-#include <iostream>
-#include <map>
 #include <chrono>
+#include <map>
 
 #define DISCOVERY_ID            0xe3f7
 #define DISCOVERY_VERSION       0x0102
@@ -38,7 +37,7 @@ namespace nettools
     static callback_discovery_request discovery_request = NULL;
     static callback_discovery_found discovery_found = NULL;
     static callback_discovery_ping_result discovery_ping_result = NULL;
-    static std::map<socket_address, std::chrono::steady_clock::time_point> discovery_ping_table;
+    static std::map<socket_address, std::chrono::system_clock::time_point> discovery_ping_table;
 
     void discovery_init(u16 port)
     {
@@ -75,7 +74,7 @@ namespace nettools
 
         if (allatonce) socket_udp_broadcast_method_allatonce(discovery_socket, &discovery_write_buffer, &discovery_iface, port);
         else socket_udp_broadcast_method_oneatime(discovery_socket, &discovery_write_buffer, &discovery_iface, port);
-    
+
         socket_configure_blocking(discovery_socket, false);
     }
 
@@ -90,7 +89,8 @@ namespace nettools
             discovery_read_buffer.flip();
 
             u16 id = discovery_read_buffer.get_u16();
-            if (id == DISCOVERY_ID) {
+            if (id == DISCOVERY_ID)
+            {
                 u16 version = discovery_read_buffer.get_u16();
                 if (version == DISCOVERY_VERSION)
                 {
@@ -109,12 +109,10 @@ namespace nettools
 
                             if (discovery_found != NULL) discovery_found(&client);
                         }
-                    }
-                    else if (type == DISCOVERY_TYPE_ANSWER)
+                    } else if (type == DISCOVERY_TYPE_ANSWER)
                     {
                         if (discovery_found != NULL) discovery_found(&client);
-                    }
-                    else if (type == DISCOVERY_TYPE_PING)
+                    } else if (type == DISCOVERY_TYPE_PING)
                     {
                         auto received = std::chrono::high_resolution_clock::now();
                         auto itr = discovery_ping_table.find(client);
@@ -127,13 +125,12 @@ namespace nettools
                             discovery_write_buffer.flip();
 
                             socket_sendto(discovery_socket, &discovery_write_buffer, &client);
-                        }
-                        else
+                        } else
                         {
                             auto send = itr->second;
                             if (discovery_ping_result)
                             {
-                                u32 needed = static_cast<u32>(std::chrono::duration_cast<std::chrono::milliseconds>(received - send).count());
+                                u32 needed = static_cast<u32>(std::chrono::duration_cast<std::chrono::milliseconds>(received.time_since_epoch() - send.time_since_epoch()).count());
                                 discovery_ping_result(&client, needed, true);
                             }
                             discovery_ping_table.erase(itr);
@@ -149,17 +146,16 @@ namespace nettools
         {
             socket_address addr = itr->first;
             auto send = itr->second;
-            
-            if ((now - send) > std::chrono::milliseconds(DISCOVERY_PING_DURATION))
+
+            if ((now.time_since_epoch() - send.time_since_epoch()) > std::chrono::milliseconds(DISCOVERY_PING_DURATION))
             {
                 if (discovery_ping_result) discovery_ping_result(&addr, 0, false);
                 itr = discovery_ping_table.erase(itr);
-            }
-            else ++itr;
+            } else ++itr;
         }
     }
 
-    void discovery_ping(socket_address* addr)
+    void discovery_ping(socket_address *addr)
     {
         discovery_write_buffer.reset();
         discovery_write_buffer.put_i16(DISCOVERY_ID);

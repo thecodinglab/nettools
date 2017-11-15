@@ -1,6 +1,12 @@
 #pragma once
 
+#ifdef _WIN32
 #include <jni_md.h>
+#else
+#include <linux/jni_md.h>
+#define JNIEXPORT
+#define JNICALL
+#endif
 #include <jni.h>
 
 #ifdef __cplusplus

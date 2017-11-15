@@ -1,0 +1,1 @@
+add_library(nettools SHARED defines.h socket.h socket.cpp buffer.h buffer.cpp udp_utility.h interface.h discovery.h discovery.cpp linux_interface.cpp)

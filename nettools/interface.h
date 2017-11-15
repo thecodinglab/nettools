@@ -17,25 +17,18 @@
 */
 #pragma once
 
-#include <cstdint>
-#include <string>
+#include "defines.h"
+#include "socket.h"
 
-#ifdef _WIN32
-#ifdef NETTOOLS_BUILD
-#define NETTOOLS_EXPORT __declspec(dllexport)
-#else
-#define NETTOOLS_EXPORT __declspec(dllimport)
-#endif
-#else
-#error only windows is supported
-#endif
+namespace nettools
+{
+    struct network_interface
+    {
+        inet_address m_unicast_addr;
+        inet_address m_subnet_addr;
+        inet_address m_network_addr;
+        inet_address m_broadcast_addr;
+    };
 
-typedef int8_t i8;
-typedef int16_t i16;
-typedef int32_t i32;
-typedef int64_t i64;
-
-typedef uint8_t u8;
-typedef uint16_t u16;
-typedef uint32_t u32;
-typedef uint64_t u64;
+    NETTOOLS_EXPORT network_interface interface_query();
+}

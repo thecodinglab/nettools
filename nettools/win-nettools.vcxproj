@@ -156,7 +156,7 @@
   <ItemGroup>
     <ClCompile Include="buffer.cpp" />
     <ClCompile Include="discovery.cpp" />
-    <ClCompile Include="interface.cpp" />
+    <ClCompile Include="win_interface.cpp" />
     <ClCompile Include="socket.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

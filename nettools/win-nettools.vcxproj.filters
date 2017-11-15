@@ -41,7 +41,7 @@
     <ClCompile Include="buffer.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="interface.cpp">
+    <ClCompile Include="win_interface.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="discovery.cpp">

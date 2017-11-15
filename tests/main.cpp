@@ -1,10 +1,9 @@
-#include <socket.h>
-#include <iostream>
-#include "buffer.h"
-#include <WS2tcpip.h>
+#include <nettools/buffer.h>
+#include <nettools/socket.h>
+#include <nettools/interface.h>
+#include <nettools/discovery.h>
+
 #include <thread>
-#include "interface.h"
-#include "discovery.h"
 
 static bool foundAClient = false;
 

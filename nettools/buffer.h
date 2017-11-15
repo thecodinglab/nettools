@@ -26,8 +26,8 @@ namespace nettools
         explicit byte_buffer(size_t);
         ~byte_buffer();
 
-        u8* get_buffer_at_offset();
-        const u8* get_const_buffer_at_offset() const;
+        u8 *get_buffer_at_offset();
+        const u8 *get_const_buffer_at_offset() const;
 
         size_t get_capacity() const;
         size_t get_limit() const;
@@ -37,8 +37,8 @@ namespace nettools
         void set_offset(const size_t);
         void flip();
         void reset();
-        
-        void get(size_t, void*, size_t) const;
+
+        void get(size_t, void *, size_t) const;
 
         i8 get_i8(size_t) const;
         i16 get_i16(size_t) const;
@@ -50,7 +50,7 @@ namespace nettools
         u32 get_u32(size_t) const;
         u64 get_u64(size_t) const;
 
-        void put(size_t, void*, size_t);
+        void put(size_t, void *, size_t);
 
         void put_i8(size_t, i8);
         void put_i16(size_t, i16);
@@ -62,7 +62,7 @@ namespace nettools
         void put_u32(size_t, u32);
         void put_u64(size_t, u64);
 
-        void get(void*, size_t);
+        void get(void *, size_t);
 
         i8 get_i8();
         i16 get_i16();
@@ -74,7 +74,7 @@ namespace nettools
         u32 get_u32();
         u64 get_u64();
 
-        void put(void*, size_t);
+        void put(void *, size_t);
 
         void put_i8(i8);
         void put_i16(i16);
@@ -86,7 +86,7 @@ namespace nettools
         void put_u32(u32);
         void put_u64(u64);
     private:
-        u8* m_buf;
+        u8 *m_buf;
         size_t m_cap;
         size_t m_lim;
         size_t m_off;

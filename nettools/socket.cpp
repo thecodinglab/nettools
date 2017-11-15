@@ -20,35 +20,45 @@
 
 namespace nettools
 {
+#ifdef _WIN32
     WSADATA wsadata;
+#endif
 
     void socket_init()
     {
+#ifdef _WIN32
         if (WSAStartup(MAKEWORD(2, 2), &wsadata) != 0)
         {
             fprintf(stderr, "ERROR: WSAStartup failed");
             exit(1);
         }
+#endif
     }
 
-    void socket_cleanup() { WSACleanup(); }
+    void socket_cleanup()
+    {
+#ifdef _WIN32
+        WSACleanup();
+#endif
+    }
 
-    sock_t socket_create(int af, int type, int protocol) { return socket(af, type, protocol); }
+    sock_t socket_create(int af, int type, int protocol)
+    { return socket(af, type, protocol); }
 
-    void socket_bind(sock_t socket, socket_address* address)
+    void socket_bind(sock_t socket, socket_address *address)
     {
         sockaddr_in addr;
         addr.sin_port = htons(address->m_port);
         addr.sin_family = AF_INET;
         addr.sin_addr.s_addr = address->m_addr.m_address;
-        bind(socket, reinterpret_cast<sockaddr*>(&addr), sizeof(sockaddr_in));
+        bind(socket, reinterpret_cast<sockaddr *>(&addr), sizeof(sockaddr_in));
     }
 
-    sock_t socket_accept(sock_t socket, socket_address* address)
+    sock_t socket_accept(sock_t socket, socket_address *address)
     {
         sockaddr_in addr;
-        i32 addr_size = sizeof(sockaddr_in);
-        sock_t client = accept(socket, reinterpret_cast<sockaddr*>(&addr), &addr_size);
+        u32 addr_size = sizeof(sockaddr_in);
+        sock_t client = accept(socket, reinterpret_cast<sockaddr *>(&addr), &addr_size);
 
         if (addr_size != sizeof(sockaddr_in)) throw std::runtime_error("Invalid address size.");
 
@@ -57,44 +67,46 @@ namespace nettools
         return client;
     }
 
-    void socket_connect(sock_t socket, socket_address* address)
+    void socket_connect(sock_t socket, socket_address *address)
     {
         sockaddr_in addr;
         addr.sin_port = htons(address->m_port);
         addr.sin_family = AF_INET;
         addr.sin_addr.s_addr = address->m_addr.m_address;
-        connect(socket, reinterpret_cast<sockaddr*>(&addr), sizeof(sockaddr_in));
+        connect(socket, reinterpret_cast<sockaddr *>(&addr), sizeof(sockaddr_in));
     }
 
-    void socket_listen(sock_t socket) { listen(socket, SOMAXCONN); }
+    void socket_listen(sock_t socket)
+    { listen(socket, SOMAXCONN); }
 
-    void socket_send(sock_t socket, byte_buffer* buffer) { send(socket, reinterpret_cast<const char*>(buffer->get_const_buffer_at_offset()), buffer->get_limit(), 0); }
+    void socket_send(sock_t socket, byte_buffer *buffer)
+    { send(socket, reinterpret_cast<const char *>(buffer->get_const_buffer_at_offset()), buffer->get_limit(), 0); }
 
-    i32 socket_read(sock_t socket, byte_buffer* buffer)
+    i32 socket_read(sock_t socket, byte_buffer *buffer)
     {
         size_t position = buffer->get_offset();
-        i32 read = recv(socket, reinterpret_cast<char*>(buffer->get_buffer_at_offset()), buffer->get_limit(), 0);
+        i32 read = recv(socket, reinterpret_cast<char *>(buffer->get_buffer_at_offset()), buffer->get_limit(), 0);
         if (read > 0) buffer->set_offset(position + read);
         return read;
     }
 
-    void socket_sendto(sock_t socket, byte_buffer* buffer, socket_address* address)
+    void socket_sendto(sock_t socket, byte_buffer *buffer, socket_address *address)
     {
         sockaddr_in addr;
         addr.sin_port = htons(address->m_port);
         addr.sin_family = AF_INET;
         addr.sin_addr.s_addr = address->m_addr.m_address;
-        sendto(socket, reinterpret_cast<const char*>(buffer->get_const_buffer_at_offset()), buffer->get_limit(), 0, reinterpret_cast<sockaddr*>(&addr), sizeof(sockaddr_in));
+        sendto(socket, reinterpret_cast<const char *>(buffer->get_const_buffer_at_offset()), buffer->get_limit(), 0, reinterpret_cast<sockaddr *>(&addr), sizeof(sockaddr_in));
     }
 
-    i32 socket_readfrom(sock_t socket, byte_buffer* buffer, socket_address* address)
+    i32 socket_readfrom(sock_t socket, byte_buffer *buffer, socket_address *address)
     {
         sockaddr_in addr;
-        i32 addr_size = sizeof(sockaddr_in);
+        u32 addr_size = sizeof(sockaddr_in);
 
         size_t position = buffer->get_offset();
-        i32 read = recvfrom(socket, reinterpret_cast<char*>(buffer->get_buffer_at_offset()), buffer->get_limit(), 0, reinterpret_cast<sockaddr*>(&addr), &addr_size);
-        
+        i32 read = recvfrom(socket, reinterpret_cast<char *>(buffer->get_buffer_at_offset()), buffer->get_limit(), 0, reinterpret_cast<sockaddr *>(&addr), &addr_size);
+
         if (addr_size != sizeof(sockaddr_in)) throw std::runtime_error("Invalid address size.");
 
         address->m_port = ntohs(addr.sin_port);
@@ -104,19 +116,43 @@ namespace nettools
         return read;
     }
 
-    void socket_close(sock_t socket) { closesocket(socket); }
+    void socket_close(sock_t socket)
+    {
+#ifdef _WIN32
+        closesocket(socket);
+#else
+        close(socket);
+#endif
+    }
 
     void socket_configure_blocking(sock_t socket, bool blocking)
     {
+#ifdef _WIN32
         u32 inonblock = blocking ? 0 : 1;
-        ioctlsocket(socket, FIONBIO, reinterpret_cast<u_long*>(&inonblock));
+        ioctlsocket(socket, FIONBIO, reinterpret_cast<u_long *>(&inonblock));
+#else
+        int flags = fcntl(socket, F_GETFL) & ~(O_NONBLOCK);
+        if (!blocking) flags |= O_NONBLOCK;
+        fcntl(socket, F_SETFL, flags);
+#endif
     }
 
-    void socket_configure_broadcast(sock_t socket, bool broadcast) { setsockopt(socket, SOL_SOCKET, SO_BROADCAST, reinterpret_cast<const char*>(&broadcast), sizeof(bool)); }
-    void socket_configure_send_timeout(sock_t socket, size_t timeout) { setsockopt(socket, SOL_SOCKET, SO_SNDTIMEO, reinterpret_cast<const char*>(&timeout), sizeof(size_t)); }
-    void socket_configure_read_timeout(sock_t socket, size_t timeout) { setsockopt(socket, SOL_SOCKET, SO_RCVTIMEO, reinterpret_cast<const char*>(&timeout), sizeof(size_t)); }
+    void socket_configure_broadcast(sock_t socket, bool broadcast)
+    {
+        setsockopt(socket, SOL_SOCKET, SO_BROADCAST, reinterpret_cast<const char *>(&broadcast), sizeof(bool));
+    }
 
-    void socket_udp_broadcast_method_allatonce(sock_t socket, byte_buffer* data, network_interface* iface, u16 port)
+    void socket_configure_send_timeout(sock_t socket, size_t timeout)
+    {
+        setsockopt(socket, SOL_SOCKET, SO_SNDTIMEO, reinterpret_cast<const char *>(&timeout), sizeof(size_t));
+    }
+
+    void socket_configure_read_timeout(sock_t socket, size_t timeout)
+    {
+        setsockopt(socket, SOL_SOCKET, SO_RCVTIMEO, reinterpret_cast<const char *>(&timeout), sizeof(size_t));
+    }
+
+    void socket_udp_broadcast_method_allatonce(sock_t socket, byte_buffer *data, network_interface *iface, u16 port)
     {
         socket_address addr;
         addr.m_addr = iface->m_broadcast_addr;
@@ -124,7 +160,7 @@ namespace nettools
         socket_sendto(socket, data, &addr);
     }
 
-    void socket_udp_broadcast_method_oneatime(sock_t socket, byte_buffer* data, network_interface* iface, u16 port)
+    void socket_udp_broadcast_method_oneatime(sock_t socket, byte_buffer *data, network_interface *iface, u16 port)
     {
         socket_address addr;
         addr.m_addr = iface->m_network_addr;

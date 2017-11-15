@@ -17,21 +17,25 @@
 */
 #pragma once
 
-#include "defines.h"
-#include "socket.h"
-#include "interface.h"
-#include "udp_utility.h"
+#include <cstdint>
+#include <string>
 
-namespace nettools
-{
-    typedef bool(*callback_discovery_request)(socket_address*);
-    typedef void(*callback_discovery_found)(socket_address*);
-    typedef void(*callback_discovery_ping_result)(socket_address*, u32, bool);
+#ifdef _WIN32
+#ifdef NETTOOLS_BUILD
+#define NETTOOLS_EXPORT __declspec(dllexport)
+#else
+#define NETTOOLS_EXPORT __declspec(dllimport)
+#endif
+#else
+#define NETTOOLS_EXPORT
+#endif
 
-    NETTOOLS_EXPORT void discovery_init(u16);
-    NETTOOLS_EXPORT void discovery_set_handlers(callback_discovery_request, callback_discovery_found, callback_discovery_ping_result);
-    NETTOOLS_EXPORT void discovery_search(u16, bool = true);
-    NETTOOLS_EXPORT void discovery_update();
-    NETTOOLS_EXPORT void discovery_ping(socket_address* addr);
-    NETTOOLS_EXPORT void discovery_close();
-}
+typedef int8_t i8;
+typedef int16_t i16;
+typedef int32_t i32;
+typedef int64_t i64;
+
+typedef uint8_t u8;
+typedef uint16_t u16;
+typedef uint32_t u32;
+typedef uint64_t u64;

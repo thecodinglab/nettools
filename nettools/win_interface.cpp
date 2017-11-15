@@ -16,8 +16,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "interface.h"
-#include <iostream>
-#include <ws2ipdef.h>
+#include <Iphlpapi.h>
 #include <WS2tcpip.h>
 
 #define MAX_TRIES 2
