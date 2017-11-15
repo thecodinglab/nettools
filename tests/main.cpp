@@ -46,7 +46,7 @@ int main()
 
     nettools::discovery_init(12345);
     nettools::discovery_set_handlers(request, found, ping);
-    nettools::discovery_search(12346);
+    nettools::discovery_search(12346, true);
 
     while (!foundAClient)
     {

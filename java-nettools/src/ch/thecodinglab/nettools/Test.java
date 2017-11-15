@@ -24,8 +24,8 @@ public class Test implements Discovery.Callback {
     }
 
     public static void main(String[] args) {
-        WinNative.loadLibrary(new File("P:\\C++\\win-nettools\\bin\\Debug\\"));
-        //WinNative.loadLibrary(new File("native"));
+        //WinNative.loadLibrary(new File("..\\bin\\Debug\\"));
+        WinNative.loadLibrary(new File("native"));
 
         Socket.initialize();
 
@@ -35,6 +35,7 @@ public class Test implements Discovery.Callback {
         Discovery.setCallback(test);
 
         long started = System.currentTimeMillis();
+        System.out.println("TEST");
         Discovery.search((short) 12345, false);
         long needed = System.currentTimeMillis() - started;
         System.out.println("Took " + needed + "ms");
