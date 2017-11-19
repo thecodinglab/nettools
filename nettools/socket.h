@@ -1,5 +1,5 @@
 /*
-* win-nettols is a library for comonly used network stuff for windows
+* nettols is a library for comonly used network stuff for windows and linux
 * Copyright (C) 2017  TheCodingLab
 *
 * This program is free software: you can redistribute it and/or modify

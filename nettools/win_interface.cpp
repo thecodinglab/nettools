@@ -1,5 +1,5 @@
 /*
-* win-nettols is a library for comonly used network stuff for windows
+* nettols is a library for comonly used network stuff for windows and linux
 * Copyright (C) 2017  TheCodingLab
 *
 * This program is free software: you can redistribute it and/or modify
@@ -53,26 +53,18 @@ namespace nettools
                 PIP_ADAPTER_UNICAST_ADDRESS unicast = current->FirstUnicastAddress;
                 if (unicast)
                 {
-                    PIP_ADAPTER_DNS_SERVER_ADDRESS dns_server = current->FirstDnsServerAddress;
-                    if (dns_server)
-                    {
-                        PIP_ADAPTER_GATEWAY_ADDRESS gateway = current->FirstGatewayAddress;
-                        if (gateway)
-                        {
-                            LPSOCKADDR unicast_address = unicast->Address.lpSockaddr;
-                            LPSOCKADDR dns_server_address = dns_server->Address.lpSockaddr;
-                            LPSOCKADDR gateway_address = gateway->Address.lpSockaddr;
+                    if (current->FirstGatewayAddress) {
+                        LPSOCKADDR unicast_address = unicast->Address.lpSockaddr;
 
-                            result.m_unicast_addr.m_b1 = unicast_address->sa_data[2];
-                            result.m_unicast_addr.m_b2 = unicast_address->sa_data[3];
-                            result.m_unicast_addr.m_b3 = unicast_address->sa_data[4];
-                            result.m_unicast_addr.m_b4 = unicast_address->sa_data[5];
+                        result.m_unicast_addr.m_b1 = unicast_address->sa_data[2];
+                        result.m_unicast_addr.m_b2 = unicast_address->sa_data[3];
+                        result.m_unicast_addr.m_b3 = unicast_address->sa_data[4];
+                        result.m_unicast_addr.m_b4 = unicast_address->sa_data[5];
 
-                            result.m_subnet_addr.m_address = (1 << unicast->OnLinkPrefixLength) - 1;
-                            result.m_network_addr.m_address = result.m_unicast_addr.m_address & result.m_subnet_addr.m_address;
-                            result.m_broadcast_addr.m_address = result.m_network_addr.m_address | ~result.m_subnet_addr.m_address;
-                            break;
-                        }
+                        result.m_subnet_addr.m_address = (1 << unicast->OnLinkPrefixLength) - 1;
+                        result.m_network_addr.m_address = result.m_unicast_addr.m_address & result.m_subnet_addr.m_address;
+                        result.m_broadcast_addr.m_address = result.m_network_addr.m_address | ~result.m_subnet_addr.m_address;
+                        break;
                     }
                 }
                 current = current->Next;

@@ -43,6 +43,8 @@ int main()
 {
     nettools::socket_init();
 
+    nettools::interface_query().m_unicast_addr.print();
+
     nettools::discovery_init(12345);
     nettools::discovery_set_handlers(request, found, ping);
     nettools::discovery_search(12346, true);
