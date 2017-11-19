@@ -82,7 +82,7 @@ public class WinNative {
             archExtension = "x86";
         }
 
-        File nettoolsFile = new File(nativesFolder, "win-nettools_" + archExtension + ".dll");
+        File nettoolsFile = new File(nativesFolder, "nettools_" + archExtension + ".dll");
         File libraryFile = new File(nativesFolder, "jni_nettools_" + archExtension + ".dll");
 
         System.load(nettoolsFile.getAbsolutePath());
@@ -131,9 +131,7 @@ public class WinNative {
 
     public static native long nInterfaceQuery();
     public static native byte[] nInterfaceGetUnicastAddress(long iface);
-    public static native byte[] nInterfaceGetDnsServerAddress(long iface);
-    public static native byte[] nInterfaceGetGatewayAddress(long iface);
-    public static native byte nInterfaceGetSubnetPrefix(long iface);
+    public static native byte[] nInterfaceGetSubnetAddress(long iface);
     public static native byte[] nInterfaceGetNetworkAddress(long iface);
     public static native byte[] nInterfaceGetBroadcastAddress(long iface);
 

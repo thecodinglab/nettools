@@ -37,7 +37,12 @@ namespace nettools
     static callback_discovery_request discovery_request = NULL;
     static callback_discovery_found discovery_found = NULL;
     static callback_discovery_ping_result discovery_ping_result = NULL;
+
+#ifdef _WIN32
+    static std::map<socket_address, std::chrono::time_point<std::chrono::steady_clock>> discovery_ping_table;
+#else
     static std::map<socket_address, std::chrono::system_clock::time_point> discovery_ping_table;
+#endif
 
     void discovery_init(u16 port)
     {

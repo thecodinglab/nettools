@@ -25,7 +25,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{BDF60425-DD92-4CD6-BB0E-7DB3874B7E09}</ProjectGuid>
     <RootNamespace>tests</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -73,31 +73,31 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)bin\$(Configuration)\$(ProjectName)_$(PlatformShortName)\</IntDir>
-    <IncludePath>$(SolutionDir)nettools\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)bin\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\</OutDir>
+    <IntDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\$(ProjectName)_$(PlatformShortName)\</IntDir>
+    <IncludePath>$(SolutionDir);$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\;$(LibraryPath)</LibraryPath>
     <TargetName>$(ProjectName)_$(PlatformShortName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)bin\$(Configuration)\$(ProjectName)_$(PlatformShortName)\</IntDir>
-    <IncludePath>$(SolutionDir)nettools\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)bin\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\</OutDir>
+    <IntDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\$(ProjectName)_$(PlatformShortName)\</IntDir>
+    <IncludePath>$(SolutionDir);$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\;$(LibraryPath)</LibraryPath>
     <TargetName>$(ProjectName)_$(PlatformShortName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)bin\$(Configuration)\$(ProjectName)_$(PlatformShortName)\</IntDir>
-    <IncludePath>$(SolutionDir)nettools\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)bin\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\</OutDir>
+    <IntDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\$(ProjectName)_$(PlatformShortName)\</IntDir>
+    <IncludePath>$(SolutionDir);$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\;$(LibraryPath)</LibraryPath>
     <TargetName>$(ProjectName)_$(PlatformShortName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)bin\$(Configuration)\$(ProjectName)_$(PlatformShortName)\</IntDir>
-    <IncludePath>$(SolutionDir)nettools\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)bin\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\</OutDir>
+    <IntDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\$(ProjectName)_$(PlatformShortName)\</IntDir>
+    <IncludePath>$(SolutionDir);$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\;$(LibraryPath)</LibraryPath>
     <TargetName>$(ProjectName)_$(PlatformShortName)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

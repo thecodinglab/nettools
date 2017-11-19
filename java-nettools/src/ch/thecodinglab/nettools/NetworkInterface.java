@@ -3,17 +3,13 @@ package ch.thecodinglab.nettools;
 public class NetworkInterface {
 
     private byte[] mUnicastAddress;
-    private byte[] mDnsServerAddress;
-    private byte[] mGatewayAddress;
-    private int mSubnetPrefix;
+    private byte[] mSubnetAddress;
     private byte[] mNetworkAddress;
     private byte[] mBroadcastAddress;
 
-    private NetworkInterface(byte[] unicastAddress, byte[] dnsServerAddress, byte[] gatewayAddress, int subnetPrefix, byte[] networkAddress, byte[] broadcastAddress) {
+    private NetworkInterface(byte[] unicastAddress, byte[] subnetAddress, byte[] networkAddress, byte[] broadcastAddress) {
         mUnicastAddress = unicastAddress;
-        mDnsServerAddress = dnsServerAddress;
-        mGatewayAddress = gatewayAddress;
-        mSubnetPrefix = subnetPrefix;
+        mSubnetAddress = subnetAddress;
         mNetworkAddress = networkAddress;
         mBroadcastAddress = broadcastAddress;
     }
@@ -22,16 +18,8 @@ public class NetworkInterface {
         return mUnicastAddress;
     }
 
-    public byte[] getDnsServerAddress() {
-        return mDnsServerAddress;
-    }
-
-    public byte[] getGatewayAddress() {
-        return mGatewayAddress;
-    }
-
-    public int getSubnetPrefix() {
-        return mSubnetPrefix;
+    public byte[] getSubnetAddress() {
+        return mSubnetAddress;
     }
 
     public byte[] getNetworkAddress() {
@@ -46,13 +34,11 @@ public class NetworkInterface {
         long iface = WinNative.nInterfaceQuery();
         GarbageCollector.registerPointer(iface, GarbageCollector.DeleteFunc.DELETE_ARRAY);
         byte[] unicastAddress = WinNative.nInterfaceGetUnicastAddress(iface);
-        byte[] dnsServerAddress = WinNative.nInterfaceGetDnsServerAddress(iface);
-        byte[] gatewayAddress = WinNative.nInterfaceGetGatewayAddress(iface);
-        int subnetPrefix = WinNative.nInterfaceGetSubnetPrefix(iface) & 0xff;
+        byte[] subnetAddress = WinNative.nInterfaceGetSubnetAddress(iface);
         byte[] networkAddress = WinNative.nInterfaceGetNetworkAddress(iface);
         byte[] broadcastAddress = WinNative.nInterfaceGetBroadcastAddress(iface);
         GarbageCollector.delete(iface);
 
-        return new NetworkInterface(unicastAddress, dnsServerAddress, gatewayAddress, subnetPrefix, networkAddress, broadcastAddress);
+        return new NetworkInterface(unicastAddress, subnetAddress, networkAddress, broadcastAddress);
     }
 }

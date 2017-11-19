@@ -1,7 +1,7 @@
 #pragma once
 
 #ifdef _WIN32
-#include <jni_md.h>
+#include <win32/jni_md.h>
 #else
 #include <linux/jni_md.h>
 #define JNIEXPORT
@@ -54,9 +54,7 @@ extern "C" {
 
     JNIEXPORT jlong JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceQuery(JNIEnv*, jclass);
     JNIEXPORT jbyteArray JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceGetUnicastAddress(JNIEnv*, jclass, jlong);
-    JNIEXPORT jbyteArray JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceGetDnsServerAddress(JNIEnv*, jclass, jlong);
-    JNIEXPORT jbyteArray JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceGetGatewayAddress(JNIEnv*, jclass, jlong);
-    JNIEXPORT jbyte JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceGetSubnetPrefix(JNIEnv*, jclass, jlong);
+    JNIEXPORT jbyteArray JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceGetSubnetAddress(JNIEnv*, jclass, jlong);
     JNIEXPORT jbyteArray JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceGetNetworkAddress(JNIEnv*, jclass, jlong);
     JNIEXPORT jbyteArray JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceGetBroadcastAddress(JNIEnv*, jclass, jlong);
 

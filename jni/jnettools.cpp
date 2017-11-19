@@ -1,8 +1,8 @@
 #include "jnettools.h"
-#include <buffer.h>
-#include <socket.h>
-#include <interface.h>
-#include "discovery.h"
+#include <nettools/buffer.h>
+#include <nettools/socket.h>
+#include <nettools/interface.h>
+#include <nettools/discovery.h>
 
 JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nFree(JNIEnv*, jclass, jlong ptr)
 {
@@ -213,26 +213,13 @@ jbyteArray JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceGetUnicastA
     return result;
 }
 
-jbyteArray JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceGetDnsServerAddress(JNIEnv* env, jclass, jlong iface)
+jbyteArray JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceGetSubnetAddress(JNIEnv* env, jclass, jlong iface)
 {
-    nettools::inet_address addr = reinterpret_cast<nettools::network_interface*>(iface)->m_dns_server_addr;
+    nettools::inet_address addr = reinterpret_cast<nettools::network_interface*>(iface)->m_subnet_addr;
 
     jbyteArray result = env->NewByteArray(4);
     env->SetByteArrayRegion(result, 0, 4, reinterpret_cast<jbyte*>(&addr));
     return result;
-}
-
-jbyteArray JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceGetGatewayAddress(JNIEnv* env, jclass, jlong iface)
-{
-    nettools::inet_address addr = reinterpret_cast<nettools::network_interface*>(iface)->m_gateway_addr;
-
-    jbyteArray result = env->NewByteArray(4);
-    env->SetByteArrayRegion(result, 0, 4, reinterpret_cast<jbyte*>(&addr));
-    return result;
-}
-jbyte JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceGetSubnetPrefix(JNIEnv*, jclass, jlong iface)
-{
-    return reinterpret_cast<nettools::network_interface*>(iface)->m_subnet_prefix;
 }
 
 jbyteArray JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceGetNetworkAddress(JNIEnv* env, jclass, jlong iface)

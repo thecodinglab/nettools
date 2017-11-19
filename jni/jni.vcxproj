@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{A87A0D55-1C4F-401C-9ADD-372C589A8F78}</ProjectGuid>
     <RootNamespace>jni</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -70,31 +70,31 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)nettools\;$(JAVA_HOME)\include;$(JAVA_HOME)\include\win32;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)bin\$(Configuration)\;$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)bin\$(Configuration)\$(ProjectName)_$(PlatformShortName)\</IntDir>
+    <IncludePath>$(SolutionDir);$(JAVA_HOME)\include;$(JAVA_HOME)\include\win32;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\</OutDir>
+    <IntDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\$(ProjectName)_$(PlatformShortName)\</IntDir>
     <TargetName>jni_nettools_$(PlatformShortName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)nettools\;$(JAVA_HOME)\include;$(JAVA_HOME)\include\win32;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)bin\$(Configuration)\;$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)bin\$(Configuration)\$(ProjectName)_$(PlatformShortName)\</IntDir>
+    <IncludePath>$(SolutionDir);$(JAVA_HOME)\include;$(JAVA_HOME)\include\win32;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\</OutDir>
+    <IntDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\$(ProjectName)_$(PlatformShortName)\</IntDir>
     <TargetName>jni_nettools_$(PlatformShortName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)nettools\;$(JAVA_HOME)\include;$(JAVA_HOME)\include\win32;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)bin\$(Configuration)\;$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)bin\$(Configuration)\$(ProjectName)_$(PlatformShortName)\</IntDir>
+    <IncludePath>$(SolutionDir);$(JAVA_HOME)\include;$(JAVA_HOME)\include\win32;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\</OutDir>
+    <IntDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\$(ProjectName)_$(PlatformShortName)\</IntDir>
     <TargetName>jni_nettools_$(PlatformShortName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)nettools\;$(JAVA_HOME)\include;$(JAVA_HOME)\include\win32;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)bin\$(Configuration)\;$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)bin\$(Configuration)\$(ProjectName)_$(PlatformShortName)\</IntDir>
+    <IncludePath>$(SolutionDir);$(JAVA_HOME)\include;$(JAVA_HOME)\include\win32;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\</OutDir>
+    <IntDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\$(ProjectName)_$(PlatformShortName)\</IntDir>
     <TargetName>jni_nettools_$(PlatformShortName)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

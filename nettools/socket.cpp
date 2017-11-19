@@ -57,8 +57,13 @@ namespace nettools
     sock_t socket_accept(sock_t socket, socket_address *address)
     {
         sockaddr_in addr;
+#ifdef _WIN32
+        i32 addr_size = sizeof(sockaddr_in);
+        sock_t client = accept(socket, reinterpret_cast<sockaddr *>(&addr), &addr_size);
+#else
         u32 addr_size = sizeof(sockaddr_in);
         sock_t client = accept(socket, reinterpret_cast<sockaddr *>(&addr), &addr_size);
+#endif
 
         if (addr_size != sizeof(sockaddr_in)) throw std::runtime_error("Invalid address size.");
 
@@ -102,10 +107,15 @@ namespace nettools
     i32 socket_readfrom(sock_t socket, byte_buffer *buffer, socket_address *address)
     {
         sockaddr_in addr;
-        u32 addr_size = sizeof(sockaddr_in);
-
         size_t position = buffer->get_offset();
+
+#ifdef _WIN32
+        i32 addr_size = sizeof(sockaddr_in);
         i32 read = recvfrom(socket, reinterpret_cast<char *>(buffer->get_buffer_at_offset()), buffer->get_limit(), 0, reinterpret_cast<sockaddr *>(&addr), &addr_size);
+#else
+        u32 addr_size = sizeof(sockaddr_in);
+        i32 read = recvfrom(socket, reinterpret_cast<char *>(buffer->get_buffer_at_offset()), buffer->get_limit(), 0, reinterpret_cast<sockaddr *>(&addr), &addr_size);
+#endif
 
         if (addr_size != sizeof(sockaddr_in)) throw std::runtime_error("Invalid address size.");
 
