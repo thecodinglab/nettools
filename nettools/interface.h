@@ -31,7 +31,14 @@ namespace nettools
         inet_address m_broadcast_addr;
     };
 
+    extern struct network_interface_list;
+
     typedef network_interface *network_interface_ptr;
+    typedef network_interface_list *network_interface_list_ptr;
 
     NETTOOLS_EXPORT network_interface interface_query();
+
+    NETTOOLS_EXPORT network_interface_list_ptr interface_query_list();
+    NETTOOLS_EXPORT network_interface_ptr interface_query_next(network_interface_list_ptr);
+    NETTOOLS_EXPORT void interface_query_close(const network_interface_list_ptr);
 }

@@ -222,6 +222,15 @@ jlong JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceQuery(JNIEnv*, j
     return reinterpret_cast<jlong>(result);
 }
 
+JNIEXPORT jbyteArray JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceGetMacAddress(JNIEnv* env, jclass, const jlong iface)
+{
+    nettools::hardware_address addr = reinterpret_cast<nettools::network_interface_ptr>(iface)->m_mac_address;
+
+    const jbyteArray result = env->NewByteArray(6);
+    env->SetByteArrayRegion(result, 0, 6, reinterpret_cast<jbyte*>(&addr));
+    return result;
+}
+
 jbyteArray JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceGetUnicastAddress(JNIEnv* env, jclass, const jlong iface)
 {
     nettools::inet_address addr = reinterpret_cast<nettools::network_interface_ptr>(iface)->m_unicast_addr;

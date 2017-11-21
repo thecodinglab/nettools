@@ -23,6 +23,11 @@
 
 namespace nettools
 {
+    struct network_interface_list
+    {
+        
+    };
+
     network_interface interface_query()
     {
         PIP_ADAPTER_ADDRESSES addresses;
@@ -75,5 +80,20 @@ namespace nettools
 
         if (addresses) free(addresses);
         return result;
+    }
+
+    network_interface_list_ptr interface_query_list()
+    {
+        
+    }
+
+    network_interface_ptr interface_query_next()
+    {
+        
+    }
+
+    void interface_query_close(const network_interface_list_ptr)
+    {
+        
     }
 }

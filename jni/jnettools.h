@@ -70,6 +70,7 @@ extern "C" {
     JNIEXPORT void JNICALL Java_ch_thecodinglab_nettools_WinNative_nSocketAddressSetPort(JNIEnv*, jclass, jlong, jshort);
 
     JNIEXPORT jlong JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceQuery(JNIEnv*, jclass);
+    JNIEXPORT jbyteArray JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceGetMacAddress(JNIEnv*, jclass, jlong);
     JNIEXPORT jbyteArray JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceGetUnicastAddress(JNIEnv*, jclass, jlong);
     JNIEXPORT jbyteArray JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceGetSubnetAddress(JNIEnv*, jclass, jlong);
     JNIEXPORT jbyteArray JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceGetNetworkAddress(JNIEnv*, jclass, jlong);
