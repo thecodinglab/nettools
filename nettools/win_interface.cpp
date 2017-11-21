@@ -53,9 +53,11 @@ namespace nettools
                 PIP_ADAPTER_UNICAST_ADDRESS unicast = current->FirstUnicastAddress;
                 if (unicast)
                 {
-                    if (current->FirstGatewayAddress) {
+                    if (current->PhysicalAddressLength == 6 && current->FirstGatewayAddress) {
                         LPSOCKADDR unicast_address = unicast->Address.lpSockaddr;
 
+                        memcpy(result.m_mac_address.m_address, current->PhysicalAddress, 6);
+                        
                         result.m_unicast_addr.m_b1 = unicast_address->sa_data[2];
                         result.m_unicast_addr.m_b2 = unicast_address->sa_data[3];
                         result.m_unicast_addr.m_b3 = unicast_address->sa_data[4];

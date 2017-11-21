@@ -19,7 +19,7 @@
 
 #include "defines.h"
 #include "buffer.h"
-#include <iostream>
+#include <sstream>
 
 #ifdef _WIN32
 #include <WinSock2.h>
@@ -52,9 +52,43 @@ namespace nettools
             };
         };
 
-        void print()
+        std::string to_string() const
         {
-            std::cout << (m_b1 & 0xff) << "." << (m_b2 & 0xff) << "." << (m_b3 & 0xff) << "." << (m_b4 & 0xff) << std::endl;
+            std::ostringstream stream;
+            stream << (m_b1 & 0xff) << '.';
+            stream << (m_b2 & 0xff) << '.';
+            stream << (m_b3 & 0xff) << '.';
+            stream << (m_b4 & 0xff);
+            return stream.str();
+        }
+    };
+
+    struct hardware_address
+    {
+        union
+        {
+            u8 m_address[6];
+            struct
+            {
+                u8 m_b1;
+                u8 m_b2;
+                u8 m_b3;
+                u8 m_b4;
+                u8 m_b5;
+                u8 m_b6;
+            };
+        };
+
+        std::string to_string() const
+        {
+            std::ostringstream stream;
+            stream << std::hex << (m_b1 & 0xff) << ':';
+            stream << std::hex << (m_b2 & 0xff) << ':';
+            stream << std::hex << (m_b3 & 0xff) << ':';
+            stream << std::hex << (m_b4 & 0xff) << ':';
+            stream << std::hex << (m_b5 & 0xff) << ':';
+            stream << std::hex << (m_b6 & 0xff);
+            return stream.str();
         }
     };
 
@@ -62,6 +96,13 @@ namespace nettools
     {
         inet_address m_addr;
         u16 m_port;
+
+        std::string to_string() const
+        {
+            std::ostringstream stream;
+            stream << m_addr.to_string() << ':' << m_port;
+            return stream.str();
+        }
 
         bool operator<(const socket_address &other) const
         {
@@ -76,18 +117,28 @@ namespace nettools
         }
     };
 
+    struct packet
+    {
+
+    };
+
+    typedef inet_address *inet_address_ptr;
+    typedef hardware_address *hardware_address_ptr;
+    typedef socket_address *socket_address_ptr;
+    typedef packet *packet_ptr;
+
     NETTOOLS_EXPORT void socket_init();
     NETTOOLS_EXPORT void socket_cleanup();
 
     NETTOOLS_EXPORT sock_t socket_create(int, int, int);
-    NETTOOLS_EXPORT void socket_bind(sock_t, socket_address *);
-    NETTOOLS_EXPORT void socket_connect(sock_t, socket_address *);
+    NETTOOLS_EXPORT void socket_bind(sock_t, socket_address_ptr);
+    NETTOOLS_EXPORT void socket_connect(sock_t, socket_address_ptr);
     NETTOOLS_EXPORT void socket_listen(sock_t);
-    NETTOOLS_EXPORT sock_t socket_accept(sock_t, socket_address *);
-    NETTOOLS_EXPORT void socket_send(sock_t, byte_buffer *);
-    NETTOOLS_EXPORT i32 socket_read(sock_t, byte_buffer *);
-    NETTOOLS_EXPORT void socket_sendto(sock_t, byte_buffer *, socket_address *);
-    NETTOOLS_EXPORT i32 socket_readfrom(sock_t, byte_buffer *, socket_address *);
+    NETTOOLS_EXPORT sock_t socket_accept(sock_t, socket_address_ptr);
+    NETTOOLS_EXPORT void socket_send(sock_t, const byte_buffer_ptr);
+    NETTOOLS_EXPORT i32 socket_read(sock_t, byte_buffer_ptr);
+    NETTOOLS_EXPORT void socket_sendto(sock_t, const byte_buffer_ptr, socket_address_ptr);
+    NETTOOLS_EXPORT i32 socket_readfrom(sock_t, byte_buffer_ptr, socket_address_ptr);
     NETTOOLS_EXPORT void socket_close(sock_t);
 
     NETTOOLS_EXPORT void socket_configure_blocking(sock_t, bool);

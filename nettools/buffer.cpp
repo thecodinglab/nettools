@@ -30,10 +30,7 @@ namespace nettools
     {
         free(m_buf); }
 
-    u8 *byte_buffer::get_buffer_at_offset()
-    { return m_buf + m_off; }
-
-    const u8 *byte_buffer::get_const_buffer_at_offset() const
+    u8 *byte_buffer::get_buffer_at_offset() const
     { return m_buf + m_off; }
 
     size_t byte_buffer::get_capacity() const
@@ -63,16 +60,16 @@ namespace nettools
         m_off = 0;
     }
 
-    void byte_buffer::get(size_t off, void *buf, size_t len) const
+    void byte_buffer::get(const size_t off, void *buf, const size_t len) const
     { memcpy(buf, m_buf + off, len); }
 
-    i8 byte_buffer::get_i8(size_t off) const
+    i8 byte_buffer::get_i8(const size_t off) const
     { return m_buf[off]; }
 
-    i16 byte_buffer::get_i16(size_t off) const
+    i16 byte_buffer::get_i16(const size_t off) const
     { return static_cast<i16>(((m_buf[off] & 0xff) << 8) | (m_buf[off + 1] & 0xff)); }
 
-    i32 byte_buffer::get_i32(size_t off) const
+    i32 byte_buffer::get_i32(const size_t off) const
     {
         return (m_buf[off] & 0xff) << 24 |
                (m_buf[off + 1] & 0xff) << 16 |
@@ -80,7 +77,7 @@ namespace nettools
                m_buf[off + 3] & 0xff;
     }
 
-    i64 byte_buffer::get_i64(size_t off) const
+    i64 byte_buffer::get_i64(const size_t off) const
     {
         return (static_cast<i64>(m_buf[off] & 0xff) << 56) |
                (static_cast<i64>(m_buf[off + 1] & 0xff) << 48) |
@@ -92,31 +89,31 @@ namespace nettools
                static_cast<i64>(m_buf[off + 7] & 0xff);
     }
 
-    u8 byte_buffer::get_u8(size_t off) const
+    u8 byte_buffer::get_u8(const size_t off) const
     { return static_cast<u8>(get_i8(off)); }
 
-    u16 byte_buffer::get_u16(size_t off) const
+    u16 byte_buffer::get_u16(const size_t off) const
     { return static_cast<u16>(get_i16(off)); }
 
-    u32 byte_buffer::get_u32(size_t off) const
+    u32 byte_buffer::get_u32(const size_t off) const
     { return static_cast<u32>(get_i32(off)); }
 
-    u64 byte_buffer::get_u64(size_t off) const
+    u64 byte_buffer::get_u64(const size_t off) const
     { return static_cast<u64>(get_i64(off)); }
 
-    void byte_buffer::put(size_t off, void *buf, size_t len)
+    void byte_buffer::put(const size_t off, const void *buf, const size_t len) const
     { memcpy(m_buf + off, buf, len); }
 
-    void byte_buffer::put_i8(size_t off, i8 val)
+    void byte_buffer::put_i8(const size_t off, const i8 val) const
     { m_buf[off] = static_cast<u8>(val); }
 
-    void byte_buffer::put_i16(size_t off, i16 val)
+    void byte_buffer::put_i16(const size_t off, const i16 val) const
     {
         m_buf[off] = static_cast<u8>((val >> 8) & 0xff);
         m_buf[off + 1] = static_cast<u8>(val & 0xff);
     }
 
-    void byte_buffer::put_i32(size_t off, i32 val)
+    void byte_buffer::put_i32(const size_t off, const i32 val) const
     {
         m_buf[off] = static_cast<u8>((val >> 24) & 0xff);
         m_buf[off + 1] = static_cast<u8>((val >> 16) & 0xff);
@@ -124,7 +121,7 @@ namespace nettools
         m_buf[off + 3] = static_cast<u8>(val & 0xff);
     }
 
-    void byte_buffer::put_i64(size_t off, i64 val)
+    void byte_buffer::put_i64(const size_t off, const i64 val) const
     {
         m_buf[off] = static_cast<u8>((val >> 56) & 0xff);
         m_buf[off + 1] = static_cast<u8>((val >> 48) & 0xff);
@@ -136,19 +133,19 @@ namespace nettools
         m_buf[off + 7] = static_cast<u8>(val & 0xff);
     }
 
-    void byte_buffer::put_u8(size_t off, u8 val)
+    void byte_buffer::put_u8(const size_t off, const u8 val) const
     { put_i8(off, static_cast<i8>(val)); }
 
-    void byte_buffer::put_u16(size_t off, u16 val)
+    void byte_buffer::put_u16(const size_t off, const u16 val) const
     { put_i16(off, static_cast<i16>(val)); }
 
-    void byte_buffer::put_u32(size_t off, u32 val)
+    void byte_buffer::put_u32(const size_t off, const u32 val) const
     { put_i32(off, static_cast<i32>(val)); }
 
-    void byte_buffer::put_u64(size_t off, u64 val)
+    void byte_buffer::put_u64(const size_t off, const u64 val) const
     { put_i64(off, static_cast<i64>(val)); }
 
-    void byte_buffer::get(void *buf, size_t len)
+    void byte_buffer::get(void *buf, const size_t len)
     {
         memcpy(buf, m_buf + m_off, len);
         m_off += len;
@@ -157,61 +154,61 @@ namespace nettools
 
     i8 byte_buffer::get_i8()
     {
-        size_t tmp = m_off;
+        const size_t tmp = m_off;
         m_off += 1;
         return get_i8(tmp);
     }
 
     i16 byte_buffer::get_i16()
     {
-        size_t tmp = m_off;
+        const size_t tmp = m_off;
         m_off += 2;
         return get_i16(tmp);
     }
 
     i32 byte_buffer::get_i32()
     {
-        size_t tmp = m_off;
+        const size_t tmp = m_off;
         m_off += 4;
         return get_i32(tmp);
     }
 
     i64 byte_buffer::get_i64()
     {
-        size_t tmp = m_off;
+        const size_t tmp = m_off;
         m_off += 8;
         return get_i64(tmp);
     }
 
     u8 byte_buffer::get_u8()
     {
-        size_t tmp = m_off;
+        const size_t tmp = m_off;
         m_off += 1;
         return static_cast<u8>(get_i8(tmp));
     }
 
     u16 byte_buffer::get_u16()
     {
-        size_t tmp = m_off;
+        const size_t tmp = m_off;
         m_off += 2;
         return static_cast<u16>(get_i16(tmp));
     }
 
     u32 byte_buffer::get_u32()
     {
-        size_t tmp = m_off;
+        const size_t tmp = m_off;
         m_off += 4;
         return static_cast<u32>(get_i32(tmp));
     }
 
     u64 byte_buffer::get_u64()
     {
-        size_t tmp = m_off;
+        const size_t tmp = m_off;
         m_off += 8;
         return static_cast<u64>(get_i64(tmp));
     }
 
-    void byte_buffer::put(void *buf, size_t len)
+    void byte_buffer::put(const void *buf, const size_t len)
     {
         memcpy(m_buf + m_off, buf, len);
         m_off += len;
@@ -219,56 +216,56 @@ namespace nettools
 
     void byte_buffer::put_i8(const i8 val)
     {
-        size_t tmp = m_off;
+        const size_t tmp = m_off;
         m_off += 1;
         put_i8(tmp, val);
     }
 
     void byte_buffer::put_i16(const i16 val)
     {
-        size_t tmp = m_off;
+        const size_t tmp = m_off;
         m_off += 2;
         put_i16(tmp, val);
     }
 
     void byte_buffer::put_i32(const i32 val)
     {
-        size_t tmp = m_off;
+        const size_t tmp = m_off;
         m_off += 4;
         put_i32(tmp, val);
     }
 
     void byte_buffer::put_i64(const i64 val)
     {
-        size_t tmp = m_off;
+        const size_t tmp = m_off;
         m_off += 8;
         put_i64(tmp, val);
     }
 
     void byte_buffer::put_u8(const u8 val)
     {
-        size_t tmp = m_off;
+        const size_t tmp = m_off;
         m_off += 1;
         put_i8(tmp, static_cast<i8>(val));
     }
 
     void byte_buffer::put_u16(const u16 val)
     {
-        size_t tmp = m_off;
+        const size_t tmp = m_off;
         m_off += 2;
         put_i16(tmp, static_cast<i16>(val));
     }
 
     void byte_buffer::put_u32(const u32 val)
     {
-        size_t tmp = m_off;
+        const size_t tmp = m_off;
         m_off += 4;
         put_i32(tmp, static_cast<i32>(val));
     }
 
     void byte_buffer::put_u64(const u64 val)
     {
-        size_t tmp = m_off;
+        const size_t tmp = m_off;
         m_off += 8;
         put_i64(tmp, static_cast<i64>(val));
     }

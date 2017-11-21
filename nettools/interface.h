@@ -24,11 +24,14 @@ namespace nettools
 {
     struct network_interface
     {
+        hardware_address m_mac_address;
         inet_address m_unicast_addr;
         inet_address m_subnet_addr;
         inet_address m_network_addr;
         inet_address m_broadcast_addr;
     };
+
+    typedef network_interface *network_interface_ptr;
 
     NETTOOLS_EXPORT network_interface interface_query();
 }
