@@ -189,7 +189,6 @@ namespace nettools
         {
             socket_sendto(socket, data, &addr);
             addr.m_addr.m_address = htonl(++address);
-            if (addr.m_addr.m_address == iface->m_unicast_addr.m_address) addr.m_addr.m_address = htonl(++address);
         }
     }
 }
