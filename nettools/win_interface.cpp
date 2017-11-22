@@ -18,6 +18,7 @@
 #include "interface.h"
 #include <Iphlpapi.h>
 #include <WS2tcpip.h>
+#include <comutil.h>
 
 #define MAX_TRIES 2
 
@@ -25,13 +26,15 @@ namespace nettools
 {
     struct network_interface_list
     {
-        
+        PIP_ADAPTER_ADDRESSES list;
+        PIP_ADAPTER_ADDRESSES current;
+        network_interface* last;
     };
 
-    network_interface interface_query()
+    network_interface_list_ptr interface_query_list()
     {
         PIP_ADAPTER_ADDRESSES addresses;
-        u32 iterations = 0, out_buffer_length = 15 * 1024;
+        u32 iterations = 0, out_buffer_length = 16 * 1024;
         i32 retval = 0;
 
         do
@@ -47,53 +50,78 @@ namespace nettools
             iterations++;
         } while ((retval == ERROR_BUFFER_OVERFLOW) && (iterations < MAX_TRIES));
 
-        network_interface result;
-        memset(&result, 0, sizeof(network_interface));
+        network_interface_list_ptr list = NULL;
 
         if (retval == NO_ERROR)
         {
-            PIP_ADAPTER_ADDRESSES current = addresses;
-            while (current)
-            {
-                PIP_ADAPTER_UNICAST_ADDRESS unicast = current->FirstUnicastAddress;
-                if (unicast)
-                {
-                    if (current->PhysicalAddressLength == 6 && current->FirstGatewayAddress) {
-                        LPSOCKADDR unicast_address = unicast->Address.lpSockaddr;
+            list = new network_interface_list;
+            list->list = addresses;
+            list->current = addresses;
+            list->last = NULL;
+        }
 
-                        memcpy(result.m_mac_address.m_address, current->PhysicalAddress, 6);
-                        
-                        result.m_unicast_addr.m_b1 = unicast_address->sa_data[2];
-                        result.m_unicast_addr.m_b2 = unicast_address->sa_data[3];
-                        result.m_unicast_addr.m_b3 = unicast_address->sa_data[4];
-                        result.m_unicast_addr.m_b4 = unicast_address->sa_data[5];
+        return list;
+    }
 
-                        result.m_subnet_addr.m_address = (1 << unicast->OnLinkPrefixLength) - 1;
-                        result.m_network_addr.m_address = result.m_unicast_addr.m_address & result.m_subnet_addr.m_address;
-                        result.m_broadcast_addr.m_address = result.m_network_addr.m_address | ~result.m_subnet_addr.m_address;
-                        break;
-                    }
-                }
-                current = current->Next;
+    network_interface_ptr interface_query_next(network_interface_list_ptr list)
+    {
+        if (!list->current) return NULL;
+
+        network_interface_ptr iface = new network_interface;
+        memset(iface, 0, sizeof(network_interface));
+
+        if (list->last) delete list->last;
+        list->last = iface;
+
+        PWCHAR wchar_description = list->current->Description;
+        _bstr_t tmp(wchar_description);
+
+        PCHAR description = tmp;
+
+        u32 len = min(strlen(description), (MAX_NAME_LENGTH - 1));
+        memcpy(iface->m_name, description, len);
+        iface->m_name[len] = 0;
+
+        PIP_ADAPTER_UNICAST_ADDRESS unicast = list->current->FirstUnicastAddress;
+        if (unicast)
+        {
+            LPSOCKADDR unicast_address = unicast->Address.lpSockaddr;
+            iface->m_unicast_addr.m_b1 = unicast_address->sa_data[2];
+            iface->m_unicast_addr.m_b2 = unicast_address->sa_data[3];
+            iface->m_unicast_addr.m_b3 = unicast_address->sa_data[4];
+            iface->m_unicast_addr.m_b4 = unicast_address->sa_data[5];
+
+            iface->m_subnet_addr.m_address = (1 << unicast->OnLinkPrefixLength) - 1;
+            iface->m_network_addr.m_address = iface->m_unicast_addr.m_address & iface->m_subnet_addr.m_address;
+            iface->m_broadcast_addr.m_address = iface->m_network_addr.m_address | ~iface->m_subnet_addr.m_address;
+        }
+
+        if (list->current->PhysicalAddressLength == 6) {
+            memcpy(iface->m_mac_address.m_address, list->current->PhysicalAddress, 6);
+        }
+
+        list->current = list->current->Next;
+        return iface;
+    }
+
+    void interface_query_close(network_interface_list_ptr list)
+    {
+        free(list->list);
+        delete list->last;
+        delete list;
+    }
+
+    network_interface interface_query()
+    {
+        network_interface_list_ptr list = interface_query_list();
+
+        network_interface_ptr current;
+        while (current = interface_query_next(list)) {
+            if (current->m_mac_address.m_address && current->m_unicast_addr.m_address && current->m_subnet_addr.m_address) {
+                return *current;
             }
         }
 
-        if (addresses) free(addresses);
-        return result;
-    }
-
-    network_interface_list_ptr interface_query_list()
-    {
-        
-    }
-
-    network_interface_ptr interface_query_next()
-    {
-        
-    }
-
-    void interface_query_close(const network_interface_list_ptr)
-    {
-        
+        return { 0 };
     }
 }

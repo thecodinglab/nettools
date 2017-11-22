@@ -41,8 +41,25 @@ int main()
 {
     nettools::socket_init();
 
-    nettools::network_interface iface = nettools::interface_query();
-    std::cout << "IP-Address: " << iface.m_mac_address.to_string() << std::endl;
+    nettools::network_interface_list_ptr list = nettools::interface_query_list();
+    
+    nettools::network_interface_ptr iface;
+    while (iface = nettools::interface_query_next(list)) {
+        std::cout << "Interface: " << iface->m_name << std::endl;
+        std::cout << "IP: " << iface->m_unicast_addr.to_string() << std::endl;
+        std::cout << "MAC: " << iface->m_mac_address.to_string() << std::endl;
+        std::cout << std::endl;
+    }
+
+    nettools::interface_query_close(list);
+
+    std::cout << "END" << std::endl;
+    
+    nettools::network_interface i = nettools::interface_query();
+    std::cout << i.m_unicast_addr.to_string() << std::endl;
+
+    std::cin.get();
+    return 0;
 
     nettools::discovery_init(12345);
     nettools::discovery_set_handlers(request, found, ping);
