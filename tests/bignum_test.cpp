@@ -17,23 +17,41 @@
 */
 #include <nettools/bignum.h>
 #include <iostream>
+#include <chrono>
+
+void print_bignum(const nettools::bignum &num)
+{
+    char string[8192];
+    num.to_string(sizeof(string), string);
+    std::cout << string << std::endl;
+}
 
 int main()
 {
-    nettools::bignum x(4);
-    nettools::bignum y(4);
-    nettools::bignum a(4);
-    nettools::bignum b(4);
-    nettools::bignum g(4);
+    nettools::bignum x(512);
+    nettools::bignum y(512);
+    nettools::bignum a(512);
+    nettools::bignum b(512);
+    nettools::bignum g(512);
 
-    x = 11;
-    y = 5;
+    std::mt19937 engine(static_cast<unsigned long>(time(NULL)));
 
+    x.randomize(engine);
+    print_bignum(x);
+    y.randomize(engine);
+    print_bignum(y);
+
+    auto started = std::chrono::high_resolution_clock::now();
+    gcd_euclid(x, y, a, b, g);
+    auto needed = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - started);
+    std::cout << "Needed " << needed.count() << "ms for gcd_euclid" << std::endl;
+
+    started = std::chrono::high_resolution_clock::now();
     //gcd_euclid(x, y, a, b, g);
     gcd(x, y, g);
+    needed = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - started);
+    std::cout << "Needed " << needed.count() << "ms for gcd" << std::endl;
 
-    char str[1024];
-    x.to_string(sizeof(str), str);
-    std::cout << str << std::endl;
+    print_bignum(g);
     return 0;
 }

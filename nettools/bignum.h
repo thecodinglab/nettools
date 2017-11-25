@@ -17,11 +17,17 @@
 */
 #pragma once
 
-#include <cstring>
 #include "defines.h"
+#include <cstring>
+#include <random>
 
+#if ARCH == ARCH_x32
 #define BIGNUM_VAL u32
 #define BIGNUM_VAL_LEN 32
+#elif ARCH == ARCH_x64
+#define BIGNUM_VAL u64
+#define BIGNUM_VAL_LEN 64
+#endif
 
 namespace nettools
 {
@@ -35,8 +41,9 @@ namespace nettools
         bignum &operator=(BIGNUM_VAL);
         bignum &operator=(const bignum &);
 
-        void to_string(u32, char *);
+        void randomize(std::mt19937 &engine);
 
+        void to_string(u32, char *) const;
         BIGNUM_VAL to_int() const;
 
         void operator<<=(BIGNUM_VAL);

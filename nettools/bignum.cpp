@@ -16,21 +16,24 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "bignum.h"
+#include <random>
+#include "standard.h"
+
 
 namespace nettools
 {
     bignum::bignum(u32 len)
     {
-        m_len = len;
+        m_len = max(sizeof(BIGNUM_VAL), len);
         m_value = new u8[m_len];
         memset(m_value, 0, m_len);
     }
 
     bignum::bignum(u32 len, void *data)
     {
-        m_len = len;
+        m_len = max(sizeof(BIGNUM_VAL), len);
         m_value = new u8[m_len];
-        memcpy(m_value, data, m_len);
+        memcpy(m_value, data, len);
     }
 
     bignum::bignum(const bignum &o)
@@ -58,13 +61,13 @@ namespace nettools
         m_value[3] = static_cast<u8>((val >> 24) & 0xff);
 #elif BIGNUM_VAL_LEN == 64
         m_value[0] = static_cast<u8>(val & 0xff);
-            m_value[1] = static_cast<u8>((val >> 8) & 0xff);
-            m_value[2] = static_cast<u8>((val >> 16) & 0xff);
-            m_value[3] = static_cast<u8>((val >> 24) & 0xff);
-            m_value[4] = static_cast<u8>((val >> 32) & 0xff);
-            m_value[5] = static_cast<u8>((val >> 40) & 0xff);
-            m_value[6] = static_cast<u8>((val >> 48) & 0xff);
-            m_value[7] = static_cast<u8>((val >> 56) & 0xff);
+        m_value[1] = static_cast<u8>((val >> 8) & 0xff);
+        m_value[2] = static_cast<u8>((val >> 16) & 0xff);
+        m_value[3] = static_cast<u8>((val >> 24) & 0xff);
+        m_value[4] = static_cast<u8>((val >> 32) & 0xff);
+        m_value[5] = static_cast<u8>((val >> 40) & 0xff);
+        m_value[6] = static_cast<u8>((val >> 48) & 0xff);
+        m_value[7] = static_cast<u8>((val >> 56) & 0xff);
 #endif
     }
 
@@ -80,7 +83,14 @@ namespace nettools
         memcpy(m_value, o.m_value, m_len);
     }
 
-    void bignum::to_string(u32 len, char *s)
+    void bignum::randomize(std::mt19937 &engine)
+    {
+        std::uniform_int_distribution<u8> dist;
+        for (u32 i = 0; i < m_len; i++)
+            m_value[i] = dist(engine);
+    }
+
+    void bignum::to_string(u32 len, char *s) const
     {
         if (len == 0) return;
 
@@ -110,13 +120,13 @@ namespace nettools
         return static_cast<u32>((m_value[0] & 0xff) | ((m_value[1] & 0xff) << 8) | ((m_value[2] & 0xff) << 16) | ((m_value[3] & 0xff) << 24));
 #elif BIGNUM_VAL_LEN == 64
         return static_cast<u64>(m_value[0] & 0xff) |
-               static_cast<u64>((m_value[1] & 0xff) << 8) |
-               static_cast<u64>((m_value[2] & 0xff) << 16) |
-               static_cast<u64>((m_value[3] & 0xff) << 24) |
-               static_cast<u64>((m_value[4] & 0xff) << 32) |
-               static_cast<u64>((m_value[5] & 0xff) << 40) |
-               static_cast<u64>((m_value[6] & 0xff) << 48) |
-               static_cast<u64>((m_value[7] & 0xff) << 56);
+               (static_cast<u64>(m_value[1] & 0xff) << 8) |
+               (static_cast<u64>(m_value[2] & 0xff) << 16) |
+               (static_cast<u64>(m_value[3] & 0xff) << 24) |
+               (static_cast<u64>(m_value[4] & 0xff) << 32) |
+               (static_cast<u64>(m_value[5] & 0xff) << 40) |
+               (static_cast<u64>(m_value[6] & 0xff) << 48) |
+               (static_cast<u64>(m_value[7] & 0xff) << 56);
 #endif
     }
 
@@ -132,7 +142,7 @@ namespace nettools
             m_value[i] = 0;
         }
 
-        u32 idx = bytes;
+        BIGNUM_VAL idx = bytes;
         for (u32 i = 0; i < m_len; i++, idx++)
         {
             u16 val = tmp[i] << static_cast<u16>(bits_per_byte);
@@ -407,7 +417,7 @@ namespace nettools
     bool operator<=(const bignum &a, const bignum &b)
     { return compare(a, b) <= 0; }
 
-    u32 bignum::remainder(BIGNUM_VAL divisor)
+    BIGNUM_VAL bignum::remainder(BIGNUM_VAL divisor)
     {
         u32 i = m_len;
         u8 rem = 0;

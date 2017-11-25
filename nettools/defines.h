@@ -20,14 +20,36 @@
 #include <cstdint>
 #include <string>
 
+#define OS_WIN 1
+#define OS_LINUX 2
+
+#define ARCH_x32 1
+#define ARCH_x64 2
+
 #ifdef _WIN32
+#define OS OS_WIN
+#ifdef _WIN64
+#define ARCH ARCH_x64
+#else
+#define ARCH ARCH_x32
+#endif
+
 #ifdef NETTOOLS_BUILD
 #define NETTOOLS_EXPORT __declspec(dllexport)
 #else
 #define NETTOOLS_EXPORT __declspec(dllimport)
 #endif
+#elif defined(linux) || defined(__linux__) || defined(__linux)
+#define OS OS_LINUX
+#if defined(__x86_64__) || defined(__ppc64__)
+#define ARCH ARCH_x64
 #else
+#define ARCH ARCH_x32
+#endif
+
 #define NETTOOLS_EXPORT
+#else
+#error unsupported operating system
 #endif
 
 typedef int8_t i8;
@@ -39,3 +61,23 @@ typedef uint8_t u8;
 typedef uint16_t u16;
 typedef uint32_t u32;
 typedef uint64_t u64;
+
+#define i8_MAX_VAL 0x7f
+#define i16_MAX_VAL 0x7fff
+#define i32_MAX_VAL 0x7fffffff
+#define i64_MAX_VAL 0x7fffffffffffffff
+
+#define u8_MAX_VAL 0xff
+#define u16_MAX_VAL 0xffff
+#define u32_MAX_VAL 0xffffffff
+#define u64_MAX_VAL 0xffffffffffffffff
+
+#define i8_BITS 8
+#define i16_BITS 16
+#define i32_BITS 32
+#define i64_BITS 64
+
+#define u8_BITS 8
+#define u16_BITS 16
+#define u32_BITS 32
+#define u64_BITS 64

@@ -16,6 +16,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "interface.h"
+#include "standard.h"
 #include <Iphlpapi.h>
 #include <WS2tcpip.h>
 #include <comutil.h>
