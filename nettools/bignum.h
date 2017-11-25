@@ -25,11 +25,8 @@
 
 namespace nettools
 {
-    struct bignum
+    struct NETTOOLS_EXPORT bignum
     {
-        u32 m_len;
-        u8 *m_value;
-
         explicit bignum(u32);
         explicit bignum(u32, void *);
         bignum(const bignum &);
@@ -37,6 +34,8 @@ namespace nettools
 
         bignum &operator=(BIGNUM_VAL);
         bignum &operator=(const bignum &);
+
+        void to_string(u32, char *);
 
         BIGNUM_VAL to_int() const;
 
@@ -78,5 +77,13 @@ namespace nettools
         friend bool operator<(const bignum &, const bignum &);
         friend bool operator<=(const bignum &, BIGNUM_VAL);
         friend bool operator<=(const bignum &, const bignum &);
+
+        friend void gcd_euclid(const bignum &, const bignum &, bignum &, bignum &, bignum &);
+        friend void gcd(const bignum &, const bignum &, bignum &);
+    private:
+        u32 m_len;
+        u8 *m_value;
+
+        BIGNUM_VAL remainder(BIGNUM_VAL);
     };
 }

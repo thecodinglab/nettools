@@ -20,18 +20,20 @@
 
 int main()
 {
-    nettools::bignum base(4);
-    nettools::bignum exponent(4);
-    nettools::bignum modulus(4);
-    nettools::bignum result(1);
+    nettools::bignum x(4);
+    nettools::bignum y(4);
+    nettools::bignum a(4);
+    nettools::bignum b(4);
+    nettools::bignum g(4);
 
-    base = 7;
-    exponent = 2;
-    modulus = 5;
+    x = 11;
+    y = 5;
 
-    modpow(base, exponent, modulus, result);
+    //gcd_euclid(x, y, a, b, g);
+    gcd(x, y, g);
 
-    BIGNUM_VAL r = result.to_int();
-    std::cout << r << std::endl;
+    char str[1024];
+    x.to_string(sizeof(str), str);
+    std::cout << str << std::endl;
     return 0;
 }

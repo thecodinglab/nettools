@@ -80,6 +80,26 @@ namespace nettools
         memcpy(m_value, o.m_value, m_len);
     }
 
+    void bignum::to_string(u32 len, char *s)
+    {
+        if (len == 0) return;
+
+        bignum n(*this);
+        u32 i = 0;
+        do
+        {
+            s[i++] = static_cast<char>(n.remainder(10) + '0');
+        } while ((n != 0) && (i < (len - 1)));
+        s[i] = 0;
+
+        for (u32 j = 0; --i > j; j++)
+        {
+            char c = s[i];
+            s[i] = s[j];
+            s[j] = c;
+        }
+    }
+
     BIGNUM_VAL bignum::to_int() const
     {
 #if BIGNUM_VAL_LEN == 8
@@ -386,4 +406,59 @@ namespace nettools
 
     bool operator<=(const bignum &a, const bignum &b)
     { return compare(a, b) <= 0; }
+
+    u32 bignum::remainder(BIGNUM_VAL divisor)
+    {
+        u32 i = m_len;
+        u8 rem = 0;
+        while (i--)
+        {
+            u16 dividend = (rem << 8) | m_value[i];
+            m_value[i] = static_cast<u8>(dividend / divisor);
+            rem = static_cast<u8>(dividend % divisor);
+        }
+        return rem;
+    }
+
+    void gcd_euclid(const bignum &x, const bignum &y, bignum &a, bignum &b, bignum &g)
+    {
+        u32 length = x.m_len;
+        if (y.m_len > length) length = y.m_len;
+
+        if (x <= y)
+        {
+            bignum q(length), r(length);
+            divide(y, x, q, r);
+            if (r == 0)
+            {
+                a = 1;
+                b = 0;
+                g = x;
+            }
+            else
+            {
+                bignum ap(length);
+                gcd_euclid(x, r, ap, b, g);
+                a = ap + b * q;
+            }
+        }
+        else
+        {
+            bignum ap(length), bp(length);
+            gcd_euclid(y, x, bp, ap, g);
+            a = y - ap;
+            b = x - bp;
+        }
+    }
+
+    void gcd(const bignum &x, const bignum &y, bignum &g)
+    {
+        if (x <= y)
+        {
+            bignum r = y % x;
+            if (r == 0) g = x;
+            else gcd(x, r, g);
+        }
+        else gcd(y, x, g);
+    }
 }
