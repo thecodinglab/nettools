@@ -15,14 +15,23 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#pragma once
+#include <nettools/bignum.h>
+#include <iostream>
 
-#include "defines.h"
-#include "socket.h"
-#include "interface.h"
-
-namespace nettools
+int main()
 {
-    NETTOOLS_EXPORT void socket_udp_broadcast_method_allatonce(sock_t, const byte_buffer_t, const network_interface_t, u16);
-    NETTOOLS_EXPORT void socket_udp_broadcast_method_oneatime(sock_t, const byte_buffer_t, const network_interface_t, u16);
+    nettools::bignum base(4);
+    nettools::bignum exponent(4);
+    nettools::bignum modulus(4);
+    nettools::bignum result(1);
+
+    base = 7;
+    exponent = 2;
+    modulus = 5;
+
+    modpow(base, exponent, modulus, result);
+
+    BIGNUM_VAL r = result.to_int();
+    std::cout << r << std::endl;
+    return 0;
 }

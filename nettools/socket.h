@@ -119,26 +119,31 @@ namespace nettools
 
     struct packet
     {
+        u32 m_packet_id;
+        u16 m_sequence;
+        u32 m_checksum;
 
+        u32 m_size;
+        u8 *m_data;
     };
 
-    typedef inet_address *inet_address_ptr;
-    typedef hardware_address *hardware_address_ptr;
-    typedef socket_address *socket_address_ptr;
-    typedef packet *packet_ptr;
+    typedef inet_address *inet_address_t;
+    typedef hardware_address *hardware_address_t;
+    typedef socket_address *socket_address_t;
+    typedef packet *packet_t;
 
     NETTOOLS_EXPORT void socket_init();
     NETTOOLS_EXPORT void socket_cleanup();
 
     NETTOOLS_EXPORT sock_t socket_create(int, int, int);
-    NETTOOLS_EXPORT void socket_bind(sock_t, socket_address_ptr);
-    NETTOOLS_EXPORT void socket_connect(sock_t, socket_address_ptr);
+    NETTOOLS_EXPORT void socket_bind(sock_t, socket_address_t);
+    NETTOOLS_EXPORT void socket_connect(sock_t, socket_address_t);
     NETTOOLS_EXPORT void socket_listen(sock_t);
-    NETTOOLS_EXPORT sock_t socket_accept(sock_t, socket_address_ptr);
-    NETTOOLS_EXPORT void socket_send(sock_t, const byte_buffer_ptr);
-    NETTOOLS_EXPORT i32 socket_read(sock_t, byte_buffer_ptr);
-    NETTOOLS_EXPORT void socket_sendto(sock_t, const byte_buffer_ptr, socket_address_ptr);
-    NETTOOLS_EXPORT i32 socket_readfrom(sock_t, byte_buffer_ptr, socket_address_ptr);
+    NETTOOLS_EXPORT sock_t socket_accept(sock_t, socket_address_t);
+    NETTOOLS_EXPORT void socket_send(sock_t, const byte_buffer_t);
+    NETTOOLS_EXPORT i32 socket_read(sock_t, byte_buffer_t);
+    NETTOOLS_EXPORT void socket_sendto(sock_t, const byte_buffer_t, socket_address_t);
+    NETTOOLS_EXPORT i32 socket_readfrom(sock_t, byte_buffer_t, socket_address_t);
     NETTOOLS_EXPORT void socket_close(sock_t);
 
     NETTOOLS_EXPORT void socket_configure_blocking(sock_t, bool);

@@ -45,142 +45,142 @@ jlong JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferCreate(JNIEnv*, jcl
 
 jlong JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGetAtPosition(JNIEnv*, jclass, const jlong buffer)
 {
-    return reinterpret_cast<jlong>(reinterpret_cast<nettools::byte_buffer_ptr>(buffer)->get_buffer_at_offset());
+    return reinterpret_cast<jlong>(reinterpret_cast<nettools::byte_buffer_t>(buffer)->get_buffer_at_offset());
 }
 
 jlong JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGetCapacity(JNIEnv*, jclass, const jlong buffer)
 {
-    return reinterpret_cast<nettools::byte_buffer_ptr>(buffer)->get_capacity();
+    return reinterpret_cast<nettools::byte_buffer_t>(buffer)->get_capacity();
 }
 
 jlong JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGetLimit(JNIEnv*, jclass, const jlong buffer)
 {
-    return reinterpret_cast<nettools::byte_buffer_ptr>(buffer)->get_limit();
+    return reinterpret_cast<nettools::byte_buffer_t>(buffer)->get_limit();
 }
 
 jlong JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGetOffset(JNIEnv*, jclass, const jlong buffer)
 {
-    return reinterpret_cast<nettools::byte_buffer_ptr>(buffer)->get_offset();
+    return reinterpret_cast<nettools::byte_buffer_t>(buffer)->get_offset();
 }
 
 void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferSetLimit(JNIEnv*, jclass, const jlong buffer, const jlong limit)
 {
-    reinterpret_cast<nettools::byte_buffer_ptr>(buffer)->set_limit(limit);
+    reinterpret_cast<nettools::byte_buffer_t>(buffer)->set_limit(limit);
 }
 
 void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferSetOffset(JNIEnv*, jclass, const jlong buffer, const jlong offset)
 {
-    reinterpret_cast<nettools::byte_buffer_ptr>(buffer)->set_offset(offset);
+    reinterpret_cast<nettools::byte_buffer_t>(buffer)->set_offset(offset);
 }
 
 void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferFlip(JNIEnv*, jclass, const jlong buffer)
 {
-    reinterpret_cast<nettools::byte_buffer_ptr>(buffer)->flip();
+    reinterpret_cast<nettools::byte_buffer_t>(buffer)->flip();
 }
 
 void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferReset(JNIEnv*, jclass, const jlong buffer)
 {
-    reinterpret_cast<nettools::byte_buffer_ptr>(buffer)->flip();
+    reinterpret_cast<nettools::byte_buffer_t>(buffer)->flip();
 }
 
 void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGet__JJJJ(JNIEnv*, jclass, const jlong buffer, const jlong offset, const jlong destination, const jlong length)
 {
-    reinterpret_cast<nettools::byte_buffer_ptr>(buffer)->get(offset, reinterpret_cast<void*>(destination), length);
+    reinterpret_cast<nettools::byte_buffer_t>(buffer)->get(offset, reinterpret_cast<void*>(destination), length);
 }
 
 jbyte JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGetI8__JJ(JNIEnv*, jclass, const jlong buffer, const jlong off)
 {
-    return reinterpret_cast<nettools::byte_buffer_ptr>(buffer)->get_i8(off);
+    return reinterpret_cast<nettools::byte_buffer_t>(buffer)->get_i8(off);
 }
 
 jshort JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGetI16__JJ(JNIEnv*, jclass, const jlong buffer, const jlong off)
 {
-    return reinterpret_cast<nettools::byte_buffer_ptr>(buffer)->get_i16(off);
+    return reinterpret_cast<nettools::byte_buffer_t>(buffer)->get_i16(off);
 }
 
 jint JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGetI32__JJ(JNIEnv*, jclass, const jlong buffer, const jlong off)
 {
-    return reinterpret_cast<nettools::byte_buffer_ptr>(buffer)->get_i32(off);
+    return reinterpret_cast<nettools::byte_buffer_t>(buffer)->get_i32(off);
 }
 
 jlong JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGetI64__JJ(JNIEnv*, jclass, const jlong buffer, const jlong off)
 {
-    return reinterpret_cast<nettools::byte_buffer_ptr>(buffer)->get_i64(off);
+    return reinterpret_cast<nettools::byte_buffer_t>(buffer)->get_i64(off);
 }
 
 void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferPut__JJJJ(JNIEnv*, jclass, const jlong buffer, const jlong offset, const jlong source, const jlong length)
 {
-    reinterpret_cast<nettools::byte_buffer_ptr>(buffer)->put(offset, reinterpret_cast<void*>(source), length);
+    reinterpret_cast<nettools::byte_buffer_t>(buffer)->put(offset, reinterpret_cast<void*>(source), length);
 }
 
 void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferPutI8__JJB(JNIEnv*, jclass, const jlong buffer, const jlong off, const jbyte val)
 {
-    reinterpret_cast<nettools::byte_buffer_ptr>(buffer)->put_i8(off, val);
+    reinterpret_cast<nettools::byte_buffer_t>(buffer)->put_i8(off, val);
 }
 
 void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferPutI16__JJS(JNIEnv*, jclass, const jlong buffer, const jlong off, const jshort val)
 {
-    reinterpret_cast<nettools::byte_buffer_ptr>(buffer)->put_i16(off, val);
+    reinterpret_cast<nettools::byte_buffer_t>(buffer)->put_i16(off, val);
 }
 
 void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferPutI32__JJI(JNIEnv*, jclass, const jlong buffer, const jlong off, const jint val)
 {
-    reinterpret_cast<nettools::byte_buffer_ptr>(buffer)->put_i32(off, val);
+    reinterpret_cast<nettools::byte_buffer_t>(buffer)->put_i32(off, val);
 }
 
 void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferPutI64__JJJ(JNIEnv*, jclass, const jlong buffer, const jlong off, const jlong val)
 {
-    reinterpret_cast<nettools::byte_buffer_ptr>(buffer)->put_i64(off, val);
+    reinterpret_cast<nettools::byte_buffer_t>(buffer)->put_i64(off, val);
 }
 
 void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGet__JJJ(JNIEnv*, jclass, const jlong buffer, const jlong destination, const jlong length)
 {
-    reinterpret_cast<nettools::byte_buffer_ptr>(buffer)->get(reinterpret_cast<void*>(destination), length);
+    reinterpret_cast<nettools::byte_buffer_t>(buffer)->get(reinterpret_cast<void*>(destination), length);
 }
 
 jbyte JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGetI8__J(JNIEnv*, jclass, const jlong buffer)
 {
-    return reinterpret_cast<nettools::byte_buffer_ptr>(buffer)->get_i8();
+    return reinterpret_cast<nettools::byte_buffer_t>(buffer)->get_i8();
 }
 
 jshort JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGetI16__J(JNIEnv*, jclass, const jlong buffer)
 {
-    return reinterpret_cast<nettools::byte_buffer_ptr>(buffer)->get_i16();
+    return reinterpret_cast<nettools::byte_buffer_t>(buffer)->get_i16();
 }
 
 jint JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGetI32__J(JNIEnv*, jclass, const jlong buffer)
 {
-    return reinterpret_cast<nettools::byte_buffer_ptr>(buffer)->get_i32();
+    return reinterpret_cast<nettools::byte_buffer_t>(buffer)->get_i32();
 }
 
 jlong JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferGetI64__J(JNIEnv*, const jclass, const jlong buffer)
 {
-    return reinterpret_cast<nettools::byte_buffer_ptr>(buffer)->get_i64();
+    return reinterpret_cast<nettools::byte_buffer_t>(buffer)->get_i64();
 }
 
 void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferPut__JJJ(JNIEnv*, jclass, const jlong buffer, const jlong source, const jlong length)
 {
-    reinterpret_cast<nettools::byte_buffer_ptr>(buffer)->put(reinterpret_cast<void*>(source), length);
+    reinterpret_cast<nettools::byte_buffer_t>(buffer)->put(reinterpret_cast<void*>(source), length);
 }
 
 void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferPutI8__JB(JNIEnv*, jclass, const jlong buffer, const jbyte val)
 {
-    reinterpret_cast<nettools::byte_buffer_ptr>(buffer)->put_i8(val);
+    reinterpret_cast<nettools::byte_buffer_t>(buffer)->put_i8(val);
 }
 
 void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferPutI16__JS(JNIEnv*, jclass, const jlong buffer, const jshort val)
 {
-    reinterpret_cast<nettools::byte_buffer_ptr>(buffer)->put_i16(val);
+    reinterpret_cast<nettools::byte_buffer_t>(buffer)->put_i16(val);
 }
 
 void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferPutI32__JI(JNIEnv*, jclass, const jlong buffer, const jint val)
 {
-    reinterpret_cast<nettools::byte_buffer_ptr>(buffer)->put_i32(val);
+    reinterpret_cast<nettools::byte_buffer_t>(buffer)->put_i32(val);
 }
 
 void JNICALL Java_ch_thecodinglab_nettools_WinNative_nBufferPutI64__JJ(JNIEnv*, jclass, const jlong buffer, const jlong val)
 {
-    reinterpret_cast<nettools::byte_buffer_ptr>(buffer)->put_i64(val);
+    reinterpret_cast<nettools::byte_buffer_t>(buffer)->put_i64(val);
 }
 
 
@@ -192,7 +192,7 @@ jlong JNICALL Java_ch_thecodinglab_nettools_WinNative_nSocketAddressCreate(JNIEn
 
 jbyteArray JNICALL Java_ch_thecodinglab_nettools_WinNative_nSocketAddressGetAddress(JNIEnv* env, jclass, const jlong address)
 {
-    nettools::inet_address addr = reinterpret_cast<nettools::socket_address_ptr>(address)->m_addr;
+    nettools::inet_address addr = reinterpret_cast<nettools::socket_address_t>(address)->m_addr;
 
     const jbyteArray result = env->NewByteArray(4);
     env->SetByteArrayRegion(result, 0, 4, reinterpret_cast<jbyte*>(&addr));
@@ -201,30 +201,30 @@ jbyteArray JNICALL Java_ch_thecodinglab_nettools_WinNative_nSocketAddressGetAddr
 
 jshort JNICALL Java_ch_thecodinglab_nettools_WinNative_nSocketAddressGetPort(JNIEnv*, jclass, const jlong address)
 {
-    return reinterpret_cast<nettools::socket_address_ptr>(address)->m_port;
+    return reinterpret_cast<nettools::socket_address_t>(address)->m_port;
 }
 void JNICALL Java_ch_thecodinglab_nettools_WinNative_nSocketAddressSetAddress(JNIEnv* env, jclass, const jlong address, const jbyteArray val)
 {
     u32 addr;
     env->GetByteArrayRegion(val, 0, 4, reinterpret_cast<jbyte*>(&addr));
-    reinterpret_cast<nettools::socket_address_ptr>(address)->m_addr.m_address = addr;
+    reinterpret_cast<nettools::socket_address_t>(address)->m_addr.m_address = addr;
 }
 void JNICALL Java_ch_thecodinglab_nettools_WinNative_nSocketAddressSetPort(JNIEnv*, jclass, const jlong address, const jshort val)
 {
-    reinterpret_cast<nettools::socket_address_ptr>(address)->m_port = val;
+    reinterpret_cast<nettools::socket_address_t>(address)->m_port = val;
 }
 
 jlong JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceQuery(JNIEnv*, jclass)
 {
     const nettools::network_interface iface = nettools::interface_query();
-    nettools::network_interface_ptr result = new nettools::network_interface[1];
+    nettools::network_interface_t result = new nettools::network_interface[1];
     result[0] = iface;
     return reinterpret_cast<jlong>(result);
 }
 
 JNIEXPORT jbyteArray JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceGetMacAddress(JNIEnv* env, jclass, const jlong iface)
 {
-    nettools::hardware_address addr = reinterpret_cast<nettools::network_interface_ptr>(iface)->m_mac_address;
+    nettools::hardware_address addr = reinterpret_cast<nettools::network_interface_t>(iface)->m_mac_address;
 
     const jbyteArray result = env->NewByteArray(6);
     env->SetByteArrayRegion(result, 0, 6, reinterpret_cast<jbyte*>(&addr));
@@ -233,7 +233,7 @@ JNIEXPORT jbyteArray JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceG
 
 jbyteArray JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceGetUnicastAddress(JNIEnv* env, jclass, const jlong iface)
 {
-    nettools::inet_address addr = reinterpret_cast<nettools::network_interface_ptr>(iface)->m_unicast_addr;
+    nettools::inet_address addr = reinterpret_cast<nettools::network_interface_t>(iface)->m_unicast_addr;
 
     const jbyteArray result = env->NewByteArray(4);
     env->SetByteArrayRegion(result, 0, 4, reinterpret_cast<jbyte*>(&addr));
@@ -242,7 +242,7 @@ jbyteArray JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceGetUnicastA
 
 jbyteArray JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceGetSubnetAddress(JNIEnv* env, jclass, const jlong iface)
 {
-    nettools::inet_address addr = reinterpret_cast<nettools::network_interface_ptr>(iface)->m_subnet_addr;
+    nettools::inet_address addr = reinterpret_cast<nettools::network_interface_t>(iface)->m_subnet_addr;
 
     const jbyteArray result = env->NewByteArray(4);
     env->SetByteArrayRegion(result, 0, 4, reinterpret_cast<jbyte*>(&addr));
@@ -251,7 +251,7 @@ jbyteArray JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceGetSubnetAd
 
 jbyteArray JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceGetNetworkAddress(JNIEnv* env, jclass, const jlong iface)
 {
-    nettools::inet_address addr = reinterpret_cast<nettools::network_interface_ptr>(iface)->m_network_addr;
+    nettools::inet_address addr = reinterpret_cast<nettools::network_interface_t>(iface)->m_network_addr;
 
     const jbyteArray result = env->NewByteArray(4);
     env->SetByteArrayRegion(result, 0, 4, reinterpret_cast<jbyte*>(&addr));
@@ -260,7 +260,7 @@ jbyteArray JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceGetNetworkA
 
 jbyteArray JNICALL Java_ch_thecodinglab_nettools_WinNative_nInterfaceGetBroadcastAddress(JNIEnv* env, jclass, const jlong iface)
 {
-    nettools::inet_address addr = reinterpret_cast<nettools::network_interface_ptr>(iface)->m_broadcast_addr;
+    nettools::inet_address addr = reinterpret_cast<nettools::network_interface_t>(iface)->m_broadcast_addr;
 
     const jbyteArray result = env->NewByteArray(4);
     env->SetByteArrayRegion(result, 0, 4, reinterpret_cast<jbyte*>(&addr));
@@ -285,13 +285,13 @@ jlong JNICALL Java_ch_thecodinglab_nettools_WinNative_nSocketCreate(JNIEnv*, jcl
 
 void JNICALL Java_ch_thecodinglab_nettools_WinNative_nSocketBind(JNIEnv*, jclass, const jlong socket, const jlong address)
 {
-    const nettools::socket_address_ptr addr = reinterpret_cast<nettools::socket_address_ptr>(address);
+    const nettools::socket_address_t addr = reinterpret_cast<nettools::socket_address_t>(address);
     nettools::socket_bind(socket, addr);
 }
 
 void JNICALL Java_ch_thecodinglab_nettools_WinNative_nSocketConnect(JNIEnv*, jclass, const jlong socket, const jlong address)
 {
-    const nettools::socket_address_ptr addr = reinterpret_cast<nettools::socket_address_ptr>(address);
+    const nettools::socket_address_t addr = reinterpret_cast<nettools::socket_address_t>(address);
     nettools::socket_connect(socket, addr);
 }
 
@@ -302,33 +302,33 @@ void JNICALL Java_ch_thecodinglab_nettools_WinNative_nSocketListen(JNIEnv*, jcla
 
 jlong JNICALL Java_ch_thecodinglab_nettools_WinNative_nSocketAccept(JNIEnv*, jclass, const jlong socket, const jlong address)
 {
-    const nettools::socket_address_ptr addr = reinterpret_cast<nettools::socket_address_ptr>(address);
+    const nettools::socket_address_t addr = reinterpret_cast<nettools::socket_address_t>(address);
     return nettools::socket_accept(socket, addr);
 }
 
 void JNICALL Java_ch_thecodinglab_nettools_WinNative_nSocketSend(JNIEnv*, jclass, const jlong socket, const jlong buffer)
 {
-    const nettools::byte_buffer_ptr buf = reinterpret_cast<nettools::byte_buffer_ptr>(buffer);
+    const nettools::byte_buffer_t buf = reinterpret_cast<nettools::byte_buffer_t>(buffer);
     nettools::socket_send(socket, buf);
 }
 
 jint JNICALL Java_ch_thecodinglab_nettools_WinNative_nSocketRead(JNIEnv*, jclass, const jlong socket, const jlong buffer)
 {
-    const nettools::byte_buffer_ptr buf = reinterpret_cast<nettools::byte_buffer_ptr>(buffer);
+    const nettools::byte_buffer_t buf = reinterpret_cast<nettools::byte_buffer_t>(buffer);
     return nettools::socket_read(socket, buf);
 }
 
 void JNICALL Java_ch_thecodinglab_nettools_WinNative_nSocketSendTo(JNIEnv*, jclass, const jlong socket, const jlong buffer, const jlong address)
 {
-    const nettools::byte_buffer_ptr buf = reinterpret_cast<nettools::byte_buffer_ptr>(buffer);
-    const nettools::socket_address_ptr addr = reinterpret_cast<nettools::socket_address_ptr>(address);
+    const nettools::byte_buffer_t buf = reinterpret_cast<nettools::byte_buffer_t>(buffer);
+    const nettools::socket_address_t addr = reinterpret_cast<nettools::socket_address_t>(address);
     nettools::socket_sendto(socket, buf, addr);
 }
 
 jint JNICALL Java_ch_thecodinglab_nettools_WinNative_nSocketReadFrom(JNIEnv*, jclass, const jlong socket, const jlong buffer, const jlong address)
 {
-    const nettools::byte_buffer_ptr buf = reinterpret_cast<nettools::byte_buffer_ptr>(buffer);
-    const nettools::socket_address_ptr addr = reinterpret_cast<nettools::socket_address_ptr>(address);
+    const nettools::byte_buffer_t buf = reinterpret_cast<nettools::byte_buffer_t>(buffer);
+    const nettools::socket_address_t addr = reinterpret_cast<nettools::socket_address_t>(address);
     return nettools::socket_readfrom(socket, buf, addr);
 }
 
@@ -359,12 +359,12 @@ void JNICALL Java_ch_thecodinglab_nettools_WinNative_nSocketConfigureReadTimeout
 
 void JNICALL Java_ch_thecodinglab_nettools_WinNative_nSocketUDPBroadcastMethodAllAtOnce(JNIEnv*, jclass, const jlong socket, const jlong buffer, const jlong iface, const jshort port)
 {
-    nettools::socket_udp_broadcast_method_allatonce(socket, reinterpret_cast<nettools::byte_buffer_ptr>(buffer), reinterpret_cast<nettools::network_interface_ptr>(iface), port);
+    nettools::socket_udp_broadcast_method_allatonce(socket, reinterpret_cast<nettools::byte_buffer_t>(buffer), reinterpret_cast<nettools::network_interface_t>(iface), port);
 }
 
 void JNICALL Java_ch_thecodinglab_nettools_WinNative_nSocketUDPBroadcastMethodOneATime(JNIEnv*, jclass, const jlong socket, const jlong buffer, const jlong iface, const jshort port)
 {
-    nettools::socket_udp_broadcast_method_oneatime(socket, reinterpret_cast<nettools::byte_buffer_ptr>(buffer), reinterpret_cast<nettools::network_interface_ptr>(iface), port);
+    nettools::socket_udp_broadcast_method_oneatime(socket, reinterpret_cast<nettools::byte_buffer_t>(buffer), reinterpret_cast<nettools::network_interface_t>(iface), port);
 }
 
 
@@ -372,7 +372,7 @@ static JavaVM* jvm = NULL;
 static jclass callbackClass = NULL;
 static jobject callbackInstance = NULL;
 
-bool discovery_request(const nettools::socket_address_ptr client)
+bool discovery_request(const nettools::socket_address_t client)
 {
     if (jvm != NULL && callbackClass != NULL && callbackInstance != NULL)
     {
@@ -389,7 +389,7 @@ bool discovery_request(const nettools::socket_address_ptr client)
     return true;
 }
 
-void discovery_found(const nettools::socket_address_ptr client)
+void discovery_found(const nettools::socket_address_t client)
 {
     if (jvm != NULL && callbackClass != NULL && callbackInstance != NULL)
     {
@@ -404,7 +404,7 @@ void discovery_found(const nettools::socket_address_ptr client)
     }
 }
 
-void discovery_ping_result(const nettools::socket_address_ptr client, const u32 time, const bool reachable)
+void discovery_ping_result(const nettools::socket_address_t client, const u32 time, const bool reachable)
 {
     if (jvm != NULL && callbackClass != NULL && callbackInstance != NULL)
     {

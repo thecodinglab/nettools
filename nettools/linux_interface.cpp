@@ -18,9 +18,92 @@
 #include "interface.h"
 #include <ifaddrs.h>
 #include <net/if.h>
+#include <cstring>
+
+#ifndef min
+#define min(a, b) ((a) < (b) ? (a) : (b))
+#endif
 
 namespace nettools
 {
+    struct network_interface_list
+    {
+        ifaddrs *m_list;
+        ifaddrs *m_current;
+        network_interface *m_last;
+    };
+
+    network_interface_list_t interface_query_list()
+    {
+        ifaddrs *addrs;
+        int code = getifaddrs(&addrs);
+        if (code != 0) exit(-1);
+
+        network_interface_list_t list = NULL;
+        if (addrs)
+        {
+            list = new network_interface_list;
+            list->m_list = addrs;
+            list->m_current = addrs;
+            list->m_last = NULL;
+        }
+
+        return list;
+    }
+
+    network_interface_t interface_query_next(network_interface_list_t list)
+    {
+        if (!list || !list->m_current) return NULL;
+
+        while (list->m_current->ifa_addr->sa_family != AF_INET) {
+            list->m_current = list->m_current->ifa_next;
+            if (!list->m_current) return NULL;
+        }
+
+        network_interface_t iface = new network_interface;
+        memset(iface, 0, sizeof(network_interface));
+
+        if (list->m_last) delete list->m_last;
+        list->m_last = iface;
+
+        char* name = list->m_current->ifa_name;
+        size_t len = min(strlen(name), MAX_NAME_LENGTH - 1);
+        memcpy(iface->m_name, name, len);
+        iface->m_name[len] = 0;
+
+        sockaddr *unicast = list->m_current->ifa_addr;
+        if (unicast && unicast->sa_family == AF_INET)
+        {
+            iface->m_unicast_addr.m_b1 = static_cast<u8>(unicast->sa_data[2] & 0xff);
+            iface->m_unicast_addr.m_b2 = static_cast<u8>(unicast->sa_data[3] & 0xff);
+            iface->m_unicast_addr.m_b3 = static_cast<u8>(unicast->sa_data[4] & 0xff);
+            iface->m_unicast_addr.m_b4 = static_cast<u8>(unicast->sa_data[5] & 0xff);
+        }
+
+        sockaddr *netmask = list->m_current->ifa_netmask;
+        if (netmask && netmask->sa_family == AF_INET)
+        {
+            iface->m_subnet_addr.m_b1 = static_cast<u8>(netmask->sa_data[2] & 0xff);
+            iface->m_subnet_addr.m_b2 = static_cast<u8>(netmask->sa_data[3] & 0xff);
+            iface->m_subnet_addr.m_b3 = static_cast<u8>(netmask->sa_data[4] & 0xff);
+            iface->m_subnet_addr.m_b4 = static_cast<u8>(netmask->sa_data[5] & 0xff);
+
+            iface->m_network_addr.m_address = iface->m_unicast_addr.m_address & iface->m_subnet_addr.m_address;
+            iface->m_broadcast_addr.m_address = iface->m_network_addr.m_address | ~iface->m_subnet_addr.m_address;
+        }
+
+        list->m_current = list->m_current->ifa_next;
+        return iface;
+    }
+
+    void interface_query_close(network_interface_list_t list)
+    {
+        if (!list) return;
+        if (list->m_list) freeifaddrs(list->m_list);
+        if (list->m_last) delete list->m_last;
+        delete list;
+    }
+
     network_interface interface_query()
     {
         ifaddrs *addrs;
@@ -58,4 +141,5 @@ namespace nettools
         freeifaddrs(addrs);
         return iface;
     }
+
 }

@@ -19,29 +19,14 @@
 
 #include "defines.h"
 #include "socket.h"
-
-#define MAX_NAME_LENGTH 32
+#include "interface.h"
 
 namespace nettools
 {
-    struct network_interface
-    {
-        char m_name[MAX_NAME_LENGTH];
-        hardware_address m_mac_address;
-        inet_address m_unicast_addr;
-        inet_address m_subnet_addr;
-        inet_address m_network_addr;
-        inet_address m_broadcast_addr;
-    };
+    struct udp_sock;
+    typedef udp_sock *udp_sock_t;
 
-    struct network_interface_list;
-
-    typedef network_interface *network_interface_t;
-    typedef network_interface_list *network_interface_list_t;
-
-    NETTOOLS_EXPORT network_interface_list_t interface_query_list();
-    NETTOOLS_EXPORT network_interface_t interface_query_next(network_interface_list_t);
-    NETTOOLS_EXPORT void interface_query_close(network_interface_list_t);
-
-    NETTOOLS_EXPORT network_interface interface_query();
+    NETTOOLS_EXPORT udp_sock_t socket_udp_create(network_interface_t, u16);
+    NETTOOLS_EXPORT void socket_udp_send(socket_address_t, packet_t, bool);
+    NETTOOLS_EXPORT void socket_udp_close(udp_sock_t);
 }

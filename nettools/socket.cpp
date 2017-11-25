@@ -48,7 +48,7 @@ namespace nettools
         return socket(af, type, protocol);
     }
 
-    void socket_bind(const sock_t socket, const socket_address_ptr address)
+    void socket_bind(const sock_t socket, const socket_address_t address)
     {
         sockaddr_in addr;
         addr.sin_port = htons(address->m_port);
@@ -57,7 +57,7 @@ namespace nettools
         bind(socket, reinterpret_cast<sockaddr *>(&addr), sizeof(sockaddr_in));
     }
 
-    sock_t socket_accept(const sock_t socket, const socket_address_ptr address)
+    sock_t socket_accept(const sock_t socket, const socket_address_t address)
     {
         sockaddr_in addr;
 #ifdef _WIN32
@@ -75,7 +75,7 @@ namespace nettools
         return client;
     }
 
-    void socket_connect(const sock_t socket, const socket_address_ptr address)
+    void socket_connect(const sock_t socket, const socket_address_t address)
     {
         sockaddr_in addr;
         addr.sin_port = htons(address->m_port);
@@ -89,12 +89,12 @@ namespace nettools
         listen(socket, SOMAXCONN);
     }
 
-    void socket_send(const sock_t socket, const byte_buffer_ptr buffer)
+    void socket_send(const sock_t socket, const byte_buffer_t buffer)
     {
         send(socket, reinterpret_cast<const char *>(buffer->get_buffer_at_offset()), buffer->get_limit(), 0);
     }
 
-    i32 socket_read(const sock_t socket, byte_buffer_ptr buffer)
+    i32 socket_read(const sock_t socket, byte_buffer_t buffer)
     {
         const size_t position = buffer->get_offset();
         const i32 read = recv(socket, reinterpret_cast<char *>(buffer->get_buffer_at_offset()), buffer->get_limit(), 0);
@@ -102,7 +102,7 @@ namespace nettools
         return read;
     }
 
-    void socket_sendto(const sock_t socket, const byte_buffer_ptr buffer, const socket_address_ptr address)
+    void socket_sendto(const sock_t socket, const byte_buffer_t buffer, const socket_address_t address)
     {
         sockaddr_in addr;
         addr.sin_port = htons(address->m_port);
@@ -111,7 +111,7 @@ namespace nettools
         sendto(socket, reinterpret_cast<const char *>(buffer->get_buffer_at_offset()), buffer->get_limit(), 0, reinterpret_cast<sockaddr *>(&addr), sizeof(sockaddr_in));
     }
 
-    i32 socket_readfrom(const sock_t socket, byte_buffer_ptr buffer, const socket_address_ptr address)
+    i32 socket_readfrom(const sock_t socket, byte_buffer_t buffer, const socket_address_t address)
     {
         sockaddr_in addr;
         const size_t position = buffer->get_offset();
@@ -169,7 +169,7 @@ namespace nettools
         setsockopt(socket, SOL_SOCKET, SO_RCVTIMEO, reinterpret_cast<const char *>(&timeout), sizeof(size_t));
     }
 
-    void socket_udp_broadcast_method_allatonce(const sock_t socket, const byte_buffer_ptr data, const network_interface_ptr iface, const u16 port)
+    void socket_udp_broadcast_method_allatonce(const sock_t socket, const byte_buffer_t data, const network_interface_t iface, const u16 port)
     {
         socket_address addr;
         addr.m_addr = iface->m_broadcast_addr;
@@ -177,7 +177,7 @@ namespace nettools
         socket_sendto(socket, data, &addr);
     }
 
-    void socket_udp_broadcast_method_oneatime(const sock_t socket, const byte_buffer_ptr data, const network_interface_ptr iface, const u16 port)
+    void socket_udp_broadcast_method_oneatime(const sock_t socket, const byte_buffer_t data, const network_interface_t iface, const u16 port)
     {
         socket_address addr;
         addr.m_addr = iface->m_network_addr;

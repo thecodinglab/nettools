@@ -15,14 +15,17 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#pragma once
-
-#include "defines.h"
-#include "socket.h"
-#include "interface.h"
+#include "icmp.h"
 
 namespace nettools
 {
-    NETTOOLS_EXPORT void socket_udp_broadcast_method_allatonce(sock_t, const byte_buffer_t, const network_interface_t, u16);
-    NETTOOLS_EXPORT void socket_udp_broadcast_method_oneatime(sock_t, const byte_buffer_t, const network_interface_t, u16);
-}
+    u16 icmp_calculate_checksum(icmp_header *header)
+    {
+        u32 sum = (header->m_type << 8) | header->m_code;
+        for (u32 i = 0; i < header->m_data_length; i++)
+            sum += (header->m_data[i++] << 8) | (i < header->m_data_length ? header->m_data[i] : 0);
+        sum = (sum >> 16) + (sum & 0xffff);
+        sum += (sum >> 16);
+        return static_cast<u16>(~sum);
+    }
+};

@@ -162,7 +162,7 @@ namespace nettools
         }
     }
 
-    void discovery_ping(const socket_address_ptr addr)
+    void discovery_ping(const socket_address_t addr)
     {
         discovery_write_buffer.reset();
         discovery_write_buffer.put_i16(DISCOVERY_ID);

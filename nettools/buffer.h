@@ -91,5 +91,5 @@ namespace nettools
         size_t m_off;
     };
 
-    typedef byte_buffer* byte_buffer_ptr;
+    typedef byte_buffer* byte_buffer_t;
 }
