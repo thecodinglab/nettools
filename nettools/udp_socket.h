@@ -23,10 +23,20 @@
 
 namespace nettools
 {
+    typedef void *sock_sequence_t;
+
     struct udp_sock;
     typedef udp_sock *udp_sock_t;
 
     NETTOOLS_EXPORT udp_sock_t socket_udp_create(network_interface_t, u16);
-    NETTOOLS_EXPORT void socket_udp_send(socket_address_t, packet_t, bool);
+
+    NETTOOLS_EXPORT void socket_udp_send(socket_address_t, const void *, bool);
+
+    NETTOOLS_EXPORT sock_sequence_t socket_udp_sequence_new(udp_sock_t, socket_address_t);
+    NETTOOLS_EXPORT void socket_udp_sequence_attach(udp_sock_t, sock_sequence_t, const void *, u32);
+    NETTOOLS_EXPORT void socket_udp_sequence_end(sock_sequence_t);
+
+    NETTOOLS_EXPORT void socket_udp_update(udp_sock_t);
+
     NETTOOLS_EXPORT void socket_udp_close(udp_sock_t);
 }

@@ -4,5 +4,5 @@ target_link_libraries(nettools-test nettools)
 add_executable(nettools-icmp-test icmp_test.cpp)
 target_link_libraries(nettools-icmp-test nettools)
 
-add_executable(nettools-bignum-test bignum_test.cpp)
-target_link_libraries(nettools-bignum-test nettools)
+add_executable(nettools-udp-socket-test udp_socket_test.cpp)
+target_link_libraries(nettools-udp-socket-test nettools)

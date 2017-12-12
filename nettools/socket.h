@@ -117,20 +117,9 @@ namespace nettools
         }
     };
 
-    struct packet
-    {
-        u32 m_packet_id;
-        u16 m_sequence;
-        u32 m_checksum;
-
-        u32 m_size;
-        u8 *m_data;
-    };
-
     typedef inet_address *inet_address_t;
     typedef hardware_address *hardware_address_t;
     typedef socket_address *socket_address_t;
-    typedef packet *packet_t;
 
     NETTOOLS_EXPORT void socket_init();
     NETTOOLS_EXPORT void socket_cleanup();
